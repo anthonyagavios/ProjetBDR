@@ -14,20 +14,6 @@ class creature(val name: String, val link: String) extends Serializable {
       return nomSpell;
     }
   }
-
-  def afficherCreature(m: String, n: String) = {
-    println(m + " : ")
-    val listeMonstre = n.split(";")
-    if (listeMonstre == null) {
-      println("    - " + n)
-    } else {
-      for (i <- 0 until listeMonstre.length) {
-        println("    - " + listeMonstre(i))
-      }
-    }
-    println("-----------------")
-  }
-
   }
 
 

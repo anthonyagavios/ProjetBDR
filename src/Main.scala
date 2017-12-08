@@ -13,14 +13,14 @@ object Main {
 
     // Creation du tableau de liens du bestiaire
     var page = new RecuperationEtTraitementDonnée;
-    //page.getBestiaire("http://paizo.com/pathfinderRPG/prd/bestiary/", "monsterIndex.html");
-    //page.getBestiaire("http://paizo.com/", "pathfinderRPG/prd/bestiary2/additionalMonsterIndex.html");
-    //page.getBestiaire("http://paizo.com/", "pathfinderRPG/prd/bestiary3/monsterIndex.html");
-    //page.getBestiaire("http://paizo.com/", "pathfinderRPG/prd/bestiary4/monsterIndex.html");
+    page.getBestiaire("http://paizo.com/pathfinderRPG/prd/bestiary/", "monsterIndex.html");
+    page.getBestiaire("http://paizo.com/", "pathfinderRPG/prd/bestiary2/additionalMonsterIndex.html");
+    page.getBestiaire("http://paizo.com/", "pathfinderRPG/prd/bestiary3/monsterIndex.html");
+    page.getBestiaire("http://paizo.com/", "pathfinderRPG/prd/bestiary4/monsterIndex.html");
     page.getBestiaire("http://paizo.com/", "pathfinderRPG/prd/bestiary5/index.html");
 
     // Affichage de tous les liens des creatures
-    println(page.links);
+    //println(page.links);
 
     // On creer toute les creatures du bestiare dans notre base de donnee
     for (lienCreature <- page.links) {
@@ -37,34 +37,19 @@ object Main {
         var Creature = new creature(nomCreature(1), lienCreature)
 
         // On ajoute les liens des spells que la creature possede
-        for (nomTemp <- page.spells) {
+        var tempSpell=page.getSpell(lienCreature);
+        for (nomTemp <- tempSpell) {
           Creature.addspell(nomTemp);
-          for(sort<-Creature.spells)
-          {/*println(Creature.name+" "+sort)*/}
         }
         bestiaire.append(Creature)
       }
     }
     println("Creation creature done")
 
-    /*
-    // On affiche le bestiaire
-    for (monstre<-bestiaire){
-      if(monstre.name=="zygomind"){
-        println(monstre.name)
-      for(sort<-monstre.spells){
-        println(sort)
-      }
-      }
-
-    }
-
-
-
     // Creation du tableau de liens de tout les spells
-    /*for (url <- page.links) {
+    for (url <- page.links) {
       page.getSpell(url);
-    }*/
+    }
 
     // Affichage de tous les liens des spells
     //println(page.spells);
@@ -78,7 +63,7 @@ object Main {
     println("-------------------")
     sorted.foreach { case (a, b: String) => afficherCreature(a, b) }
 
-    */
+
   }
 
   def afficherCreature(m: String, n: String) = {

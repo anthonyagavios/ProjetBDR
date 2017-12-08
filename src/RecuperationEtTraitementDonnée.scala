@@ -3,11 +3,12 @@ import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 
 class RecuperationEtTraitementDonnée {
   var links = new ArrayBuffer[String]()
-  var spells = new ArrayBuffer[String]()
+
 
   // Fonction qui retourne un tableau de liens url correspondant aux spells d'une creature
-  def getSpell(url: String) {
+  def getSpell(url: String): ArrayBuffer[String] = {
 
+    var spells = new ArrayBuffer[String]()
     // Les liens url des creature traiter dans getBestiaire
     // Pour la phase de devellopement et de test for(url<-links){
 
@@ -39,7 +40,7 @@ class RecuperationEtTraitementDonnée {
                 var link = "http://paizo.com" + linkTraiter.split("\"")(1)
                 if (link.contains(("spells"))) {
                   // On ajoute les liens dans le tableau de spells
-                  println(nom+" "+link)
+                  //println(nom(1) + " " + link)
                   spells.append(link)
                 }
               }
@@ -53,7 +54,8 @@ class RecuperationEtTraitementDonnée {
     catch {
       case e: Exception => None
     }
-    //}
+
+    return spells;
 
 
   }
