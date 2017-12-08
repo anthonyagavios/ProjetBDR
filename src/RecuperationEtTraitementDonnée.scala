@@ -39,6 +39,7 @@ class RecuperationEtTraitementDonnée {
                 var link = "http://paizo.com" + linkTraiter.split("\"")(1)
                 if (link.contains(("spells"))) {
                   // On ajoute les liens dans le tableau de spells
+                  println(nom+" "+link)
                   spells.append(link)
                 }
               }

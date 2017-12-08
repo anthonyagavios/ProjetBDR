@@ -20,18 +20,17 @@ import test.creature
 
 //Having this inside GraphColoring caused so many problems omg
 //ids are randomized
-class node(var color : Int = 1,var creat: creature = new creature("Solar"), var id: VertexId = 1L) extends Serializable
-{
+class node(var color: Int = 1, var creat: creature = new creature("Solar"), var id: VertexId = 1L) extends Serializable {
   //Utile pour imprimer le graphe après
   override def toString: String = s"id : $id, Creature : $creat "
 }
 
-object Graphs extends Serializable{
+object Graphs extends Serializable {
 
   /* Utils */
   //Fonction template pour imprimer n'importe quel graphe
   def printg[VD, ED](g: Graph[VD, ED]): Unit = {
-    g.vertices.collect.foreach( vv => {
+    g.vertices.collect.foreach(vv => {
       println(s"vertexID : ${vv._1} node: ${vv._2}")
     })
   }
@@ -49,13 +48,12 @@ object Graphs extends Serializable{
   //  graph G {
   //    0 [label="p1 = 1 p2 = 1 p3 = 1 "];
   //    0 -- 1;
-  def readGraphViz(filename: String, sc : SparkContext): Graph[node, String] = {
+  def readGraphViz(filename: String, sc: SparkContext): Graph[node, String] = {
     import scala.io.Source
     var edgesVector: Vector[Edge[String]] = Vector.empty[Edge[String]]
 
     //Comment inferer le return??
-    def treatLine(line: String): Option[Edge[String]] =
-    {
+    def treatLine(line: String): Option[Edge[String]] = {
       //les sommets commencent a 1
       val values = line.split(" ") //Split with space separator
 
@@ -65,11 +63,11 @@ object Graphs extends Serializable{
       }
 
       //Gerer le label (pas besoin)
-      if (values(1)(0) == '[' ) return Option(null)
+      if (values(1)(0) == '[') return Option(null)
 
       //Faire une edge
       val src = values(0).toLong + 1
-      val dst = values(2).replace(";","").toLong + 1
+      val dst = values(2).replace(";", "").toLong + 1
 
       val e: Edge[String] = Edge(src.toLong, dst, line)
       return Option(e)
@@ -88,7 +86,7 @@ object Graphs extends Serializable{
   }
 
   //Lire le graphe
-  def readGraphFromFile(filename: String, sc : SparkContext): Graph[node, String] = {
+  def readGraphFromFile(filename: String, sc: SparkContext): Graph[node, String] = {
     import scala.io.Source
     var edgesVector: Vector[Edge[String]] = Vector.empty[Edge[String]]
 
@@ -111,12 +109,11 @@ object Graphs extends Serializable{
     val lookup_table: Array[Array[Int]] = Array.fill(max, max)(5)
 
     //Comment inferer le return??
-    def treatLine(line: String): Edge[String] =
-    {
+    def treatLine(line: String): Edge[String] = {
       //e 980 940
       //les sommets commencent a 1
       val values = line.split(" ") //Split with space separator
-    val src = values(1)
+      val src = values(1)
       val dest = values(2)
 
       //Si l'arete existe deja, on retourne une arete vide (Graphe non dirige svp!!)
@@ -147,7 +144,7 @@ object Graphs extends Serializable{
       }
     }
     val erdd = sc.makeRDD(edgesVector)
-    val graph: Graph[node, String] = Graph.fromEdges(erdd, new node() ) //set all vertices to the color 1, initially
+    val graph: Graph[node, String] = Graph.fromEdges(erdd, new node()) //set all vertices to the color 1, initially
     //NB_COULEUR_MAX = graph.vertices.count().toInt //Set Max number of colors to extreme upper bound
 
     return graph
@@ -174,38 +171,37 @@ class FC2 extends Serializable {
   var NB_COULEUR_MAX = 0
 
   //(SEND MSG) This function lets nodes compete against each other by sending their VertexIds
-  def sendIds(ctx: EdgeContext[node, String, VertexId]) : Unit = {
+  def sendIds(ctx: EdgeContext[node, String, VertexId]): Unit = {
 
     //Do we send to a given vertex. SRC or DST.
     //To get a vertexid, a vertex must be "knighthood = false"
     //Also, vertices that are already knights cannot send VertexIDs
     if (ctx.srcAttr.knighthood == false && ctx.dstAttr.knighthood == false) {
-      ctx.sendToDst( ctx.srcAttr.id  )
-      ctx.sendToSrc( ctx.dstAttr.id)
+      ctx.sendToDst(ctx.srcAttr.id)
+      ctx.sendToSrc(ctx.dstAttr.id)
     }
   }
 
   //Selects the best id (MergeMSG)
-  def selectBestID(id1: VertexId, id2 : VertexId): VertexId = {
+  def selectBestID(id1: VertexId, id2: VertexId): VertexId = {
     if (id1 < id2) id1
     else id2
   }
 
   //Le sommet change de couleur avec ça
-  def augmenterCouleur(vid : VertexId, sommet : node, bestId : VertexId) : node =
-  {
+  def augmenterCouleur(vid: VertexId, sommet: node, bestId: VertexId): node = {
 
     //If our ID is better, we keep this color and others will have to change
     if (sommet.id < bestId)
-      return new node(sommet.color, true, sommet.id )
+      return new node(sommet.color, true, sommet.id)
     else {
-      return new node( sommet.color+1, false, sommet.id)
+      return new node(sommet.color + 1, false, sommet.id)
     }
   }
 
   //This is a helper function to execute aggregateMessages over a number of iterations on a certain graph
   //TODO : Dur a debugger a cause des actions
-  def execute(g: Graph[node, String], maxIterations: Int, sc : SparkContext): Graph[node, String] = {
+  def execute(g: Graph[node, String], maxIterations: Int, sc: SparkContext): Graph[node, String] = {
     var myGraph = g
     var counter = 0
     NB_COULEUR_MAX = g.vertices.count().toInt
@@ -216,7 +212,7 @@ class FC2 extends Serializable {
     def loop1: Unit = {
       while (true) {
         println("ITERATION NUMERO : " + (counter + 1))
-        counter+=1
+        counter += 1
         if (counter == maxIterations) return
         //after this, each vertice contains its messages
         //TODO: optional triplet fields pour que aggregatemsg optimise son join strategy
@@ -231,6 +227,7 @@ class FC2 extends Serializable {
         myGraph = myGraph.joinVertices(vertice_and_messages)((vid, sommet, bestId) => augmenterCouleur(vid, sommet, bestId))
       }
     }
+
     loop1 //execute loop
 
     myGraph //return the result graph
@@ -241,37 +238,36 @@ class FC2 extends Serializable {
 
 /**
   * Trouver la plus petite couleur disponible de 1 jusqu'au nombre chromatique du graph.
+  *
   * @param  sc SparkContext object
   **/
-class Compute(sc : SparkContext) extends Serializable
-{
+class Compute(sc: SparkContext) extends Serializable {
 
-  def randomize_ids(g : Graph[node, String]): Graph[node, String] =
-  {
-    val count : Int = g.vertices.count().toInt
+  def randomize_ids(g: Graph[node, String]): Graph[node, String] = {
+    val count: Int = g.vertices.count().toInt
     //Preparer un graph random
     //Randomizer les ids
-    var ids_random : ArrayBuffer[Int] = new ArrayBuffer()
+    var ids_random: ArrayBuffer[Int] = new ArrayBuffer()
     //val seed = Random.nextInt(100)
     // println("le seed est : "+seed)
     // Random.setSeed(seed)
     Random.shuffle(1 to count).copyToBuffer(ids_random)
-    var cc  = 0
+    var cc = 0
     var vertices = g.vertices.collect()
-    vertices = vertices.map(  v => {
+    vertices = vertices.map(v => {
       val n = new node(1, false, ids_random(cc))
       cc += 1
       (v._1, n)
     })
 
-    Graph( sc.makeRDD(vertices), g.edges)
+    Graph(sc.makeRDD(vertices), g.edges)
   }
 
   //Run a graph (already in memory)
   //We can make the graph run X times
   //Algorithms supported : FC1, FC2
   //We also randomize the IDS before
-  def run_graph(g : Graph[node, String], times: Int = 1,  maxIterations : Int = 400, algorithm: String = "FC2") : Unit = {
+  def run_graph(g: Graph[node, String], times: Int = 1, maxIterations: Int = 400, algorithm: String = "FC2"): Unit = {
     //Repeat this coloring
 
     for (i <- 1 to times) {
@@ -301,7 +297,7 @@ class Compute(sc : SparkContext) extends Serializable
         val coloring = new FC2()
         println("ALGORITHME FC2")
         val res = coloring.execute(myGraph, maxIterations, sc)
-        println("\nNombre de couleur trouvées: " +  Graphs.getChromaticNumber(res))
+        println("\nNombre de couleur trouvées: " + Graphs.getChromaticNumber(res))
         println("\nGraph resultat : ")
         Graphs.printg(res)
         println("\n")
@@ -310,7 +306,7 @@ class Compute(sc : SparkContext) extends Serializable
   }
 
   //Max = max iterations
-  def run_col_graph(filename: String, maxIterations : Int, algorithm: String = "FC2"): Unit = {
+  def run_col_graph(filename: String, maxIterations: Int, algorithm: String = "FC2"): Unit = {
 
     var myGraph: Graph[node, String] = Graphs.readGraphFromFile(filename, sc)
 
@@ -331,7 +327,7 @@ class Compute(sc : SparkContext) extends Serializable
     }
   }
 
-  def run_graphviz(filename : String, maxIterations : Int, algorithm : String = "FC2") : Unit = {
+  def run_graphviz(filename: String, maxIterations: Int, algorithm: String = "FC2"): Unit = {
 
     var myGraph = Graphs.readGraphViz(filename, sc)
 
@@ -355,7 +351,7 @@ class Compute(sc : SparkContext) extends Serializable
 
   //Run a whole computation of graphviz files
   //Takes a list of files as parameter
-  def runFolderGraphVizFC2( names : List[String], times : Int = 10, maxIterations : Int, outFilename : String) : Unit = {
+  def runFolderGraphVizFC2(names: List[String], times: Int = 10, maxIterations: Int, outFilename: String): Unit = {
     for (i <- names) {
       val filename = i
       val coloring = new FC2()
@@ -377,7 +373,7 @@ object testFolderCalculs extends App {
   val sc = new SparkContext(conf)
   sc.setLogLevel("ERROR")
   var truc = new Compute(sc)
-  truc.runFolderGraphVizFC2( List("6,2.txt", "7,2.txt") , 10, 400, "out.txt")
+  truc.runFolderGraphVizFC2(List("6,2.txt", "7,2.txt"), 10, 400, "out.txt")
 }
 
 
