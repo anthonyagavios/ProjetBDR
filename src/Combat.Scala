@@ -6,7 +6,6 @@ import org.apache.spark.util.LongAccumulator
 
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random
-import test.creature
 
 //TODO : problemes de Garbage collection
 //TODO : take(1) ??
@@ -20,9 +19,9 @@ import test.creature
 
 //Having this inside GraphColoring caused so many problems omg
 //ids are randomized
-class node(var color: Int = 1, var creat: creature = new creature("Solar"), var id: VertexId = 1L) extends Serializable {
+class node(var color: Int = 1, var creat: creature = new creature("Solar", "http://www.d20pfsrd.com/bestiary/monster-listings/outsiders/angel/solar"), var id: VertexId = 1L) extends Serializable {
   //Utile pour imprimer le graphe après
-  override def toString: String = s"id : $id, Creature : $creat "
+  override def toString: String = s"id : $id color, $color creature : $creat "
 }
 
 object Graphs extends Serializable {
@@ -386,7 +385,7 @@ object testPetersenGraph extends App {
   sc.setLogLevel("ERROR")
 
   var myVertices = sc.makeRDD(Array(
-    (1L, new node(id = 1L), new creature("Solar")), //A
+    (1L, new node(id = 1L), new creature("Solar","http://www.d20pfsrd.com/bestiary/monster-listings/outsiders/angel/solar")), //A
     (2L, new node(id = 2)), //B
     (3L, new node(id = 3)), //C
     (4L, new node(id = 4)), //D
