@@ -151,7 +151,7 @@ class Solar() {
   def attaque(typeAttaque: String, ennemi: PartyWyrm, nomEnnemi: String, numero: Int): Int = {
 
     if (typeAttaque == "ranged") {
-      if (nomEnnemi == "angleSlayer") {
+      if (nomEnnemi == "angelSlayer") {
         for (att <- 0 to 3) {
           if (jetDeDes() + (31 - 5 * att) > ennemi.angelSlayer(numero).AC) {
             var degats = scala.util.Random.nextInt(26)
@@ -219,7 +219,7 @@ class Solar() {
 
     }
     else if (typeAttaque == "melee") {
-      if (nomEnnemi == "angleSlayer") {
+      if (nomEnnemi == "angelSlayer") {
         for (att <- 0 to 3) {
           if (jetDeDes() + (35 - 5 * att) > ennemi.angelSlayer(numero).AC) {
             var degats = scala.util.Random.nextInt(36)
@@ -305,7 +305,7 @@ class Planetar() {
   def attaque(typeAttaque: String, ennemi: PartyWyrm, nomEnnemi: String, numero: Int): Int = {
 
     if (typeAttaque == "melee") {
-      if (nomEnnemi == "angleSlayer") {
+      if (nomEnnemi == "angelSlayer") {
         for (att <- 0 to 2) {
           if (jetDeDes() + (27 - 5 * att) > ennemi.angelSlayer(numero).AC) {
             var degats = scala.util.Random.nextInt(33)
@@ -396,7 +396,7 @@ class MovanicDeva() {
   def attaque(typeAttaque: String, ennemi: PartyWyrm, nomEnnemi: String, numero: Int): Int = {
 
     if (typeAttaque == "melee") {
-      if (nomEnnemi == "angleSlayer") {
+      if (nomEnnemi == "angelSlayer") {
         for (att <- 0 to 2) {
           if (jetDeDes() + (17 - 5 * att) > ennemi.angelSlayer(numero).AC) {
             var degats = scala.util.Random.nextInt(19)
@@ -486,7 +486,7 @@ class AstralDeva() {
   def attaque(typeAttaque: String, ennemi: PartyWyrm, nomEnnemi: String, numero: Int): Int = {
 
     if (typeAttaque == "melee") {
-      if (nomEnnemi == "angleSlayer") {
+      if (nomEnnemi == "angelSlayer") {
         for (att <- 0 to 2) {
           if (jetDeDes() + (26 - 5 * att) > ennemi.angelSlayer(numero).AC) {
             var degats = scala.util.Random.nextInt(22)

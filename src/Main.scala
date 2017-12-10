@@ -1,5 +1,8 @@
 import org.apache.spark.{SparkConf, SparkContext}
 import org.jsoup.Jsoup
+import scala.util.control.Breaks
+import scala.util.control.Breaks._
+
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -84,55 +87,196 @@ object Main {
 
     var gentil = new PartySolar(1, 2, 2, 5)
     var mechant = new PartyWyrm(1, 200, 10, 0, 0)
+    var fin = false
+    var tour = 1
 
-    while (!mechant.barbareOrc.isEmpty) {
-      println(mechant.barbareOrc.size)
-      if (!mechant.barbareOrc.isEmpty) {
-        if (!gentil.solar.isEmpty) {
-          for (sol <- gentil.solar) {
-            sol.attaque("ranged", mechant, "babareOrc", 0)
+    breakable {
+      while (!fin) {
+        //TODO
+        // il faudra tenir compte de l'initiative des creatures pour les vrai combats
+
+        for (drake <- mechant.greenGreatWyrmDragon) {
+          if (!gentil.solar.isEmpty) {
+            drake.attaque("melee", gentil, gentil.solar(0).name, 0)
+          }
+          else if (!gentil.planetar.isEmpty) {
+            drake.attaque("melee", gentil, gentil.planetar(0).name, 0)
+          }
+          else if (!gentil.movanicDeva.isEmpty) {
+            drake.attaque("melee", gentil, gentil.movanicDeva(0).name, 0)
+          }
+          else if (!gentil.astralDeva.isEmpty) {
+            drake.attaque("melee", gentil, gentil.astralDeva(0).name, 0)
+          } else Breaks
+
+        }
+
+        for (sol <- gentil.solar) {
+          if (!mechant.greenGreatWyrmDragon.isEmpty) {
+            sol.attaque("melee", mechant, mechant.greenGreatWyrmDragon(0).name, 0)
+          }
+          else if (!mechant.angelSlayer.isEmpty) {
+            sol.attaque("melee", mechant, mechant.angelSlayer(0).name,0)
+          }
+          else if (!mechant.warlord.isEmpty) {
+            sol.attaque("melee", mechant, mechant.warlord(0).name, 0)
+          }
+          else if (!mechant.barbareOrc.isEmpty) {
+            sol.attaque("melee", mechant, mechant.barbareOrc(0).name, 0)
+          }
+          else if (!mechant.worgsRider.isEmpty) {
+            sol.attaque("melee", mechant, mechant.worgsRider(0).name, 0)
+          }else Breaks
+        }
+
+        for (pla <- gentil.planetar) {
+          if (!mechant.greenGreatWyrmDragon.isEmpty) {
+            pla.attaque("melee", mechant, mechant.greenGreatWyrmDragon(0).name, 0)
+          }
+          else if (!mechant.angelSlayer.isEmpty) {
+            pla.attaque("melee", mechant, mechant.angelSlayer(0).name, 0)
+          }
+          else if (!mechant.warlord.isEmpty) {
+            pla.attaque("melee", mechant, mechant.warlord(0).name, 0)
+          }
+          else if (!mechant.barbareOrc.isEmpty) {
+            pla.attaque("melee", mechant, mechant.barbareOrc(0).name, 0)
+          }
+          else if (!mechant.worgsRider.isEmpty) {
+            pla.attaque("melee", mechant, mechant.worgsRider(0).name, 0)
+          } else Breaks
+        }
+
+        for (mov <- gentil.movanicDeva) {
+          if (!mechant.greenGreatWyrmDragon.isEmpty) {
+            mov.attaque("melee", mechant, mechant.greenGreatWyrmDragon(0).name, 0)
+          }
+          else if (!mechant.angelSlayer.isEmpty) {
+            mov.attaque("melee", mechant, mechant.angelSlayer(0).name, 0)
+          }
+          else if (!mechant.warlord.isEmpty) {
+            mov.attaque("melee", mechant, mechant.warlord(0).name, 0)
+          }
+          else if (!mechant.barbareOrc.isEmpty) {
+            mov.attaque("melee", mechant, mechant.barbareOrc(0).name, 0)
+          }
+          else if (!mechant.worgsRider.isEmpty) {
+            mov.attaque("melee", mechant, mechant.worgsRider(0).name, 0)
+          } else Breaks
+        }
+
+        for (ast <- gentil.astralDeva) {
+          if (!mechant.greenGreatWyrmDragon.isEmpty) {
+            ast.attaque("melee", mechant, mechant.greenGreatWyrmDragon(0).name, 0)
+          }
+          else if (!mechant.angelSlayer.isEmpty) {
+            ast.attaque("melee", mechant, mechant.angelSlayer(0).name, 0)
+          }
+          else if (!mechant.warlord.isEmpty) {
+            ast.attaque("melee", mechant, mechant.warlord(0).name, 0)
+          }
+          else if (!mechant.barbareOrc.isEmpty) {
+            ast.attaque("melee", mechant, mechant.barbareOrc(0).name, 0)
+          }
+          else if (!mechant.worgsRider.isEmpty) {
+            ast.attaque("melee", mechant, mechant.worgsRider(0).name, 0)
+          } else Breaks
+        }
+
+        for (angS <- mechant.angelSlayer) {
+          if (!gentil.solar.isEmpty) {
+            angS.attaque("melee", gentil, gentil.solar(0).name, 0)
+          }
+          else if (!gentil.planetar.isEmpty) {
+            angS.attaque("melee", gentil, gentil.planetar(0).name, 0)
+          }
+          else if (!gentil.movanicDeva.isEmpty) {
+            angS.attaque("melee", gentil, gentil.movanicDeva(0).name, 0)
+          }
+          else if (!gentil.astralDeva.isEmpty) {
+            angS.attaque("melee", gentil, gentil.astralDeva(0).name, 0)
+          } else Breaks
+
+        }
+
+        for (warL <- mechant.warlord) {
+          if (!gentil.solar.isEmpty) {
+            warL.attaque("melee", gentil, gentil.solar(0).name, 0)
+          }
+          else if (!gentil.planetar.isEmpty) {
+            warL.attaque("melee", gentil, gentil.planetar(0).name, 0)
+          }
+          else if (!gentil.movanicDeva.isEmpty) {
+            warL.attaque("melee", gentil, gentil.movanicDeva(0).name, 0)
+          }
+          else if (!gentil.astralDeva.isEmpty) {
+            warL.attaque("melee", gentil, gentil.astralDeva(0).name, 0)
+          } else Breaks
+
+        }
+
+        for (barOrc <- mechant.barbareOrc) {
+          if (!gentil.solar.isEmpty) {
+            barOrc.attaque("melee", gentil, gentil.solar(0).name, 0)
+          }
+          else if (!gentil.planetar.isEmpty) {
+            barOrc.attaque("melee", gentil, gentil.planetar(0).name, 0)
+          }
+          else if (!gentil.movanicDeva.isEmpty) {
+            barOrc.attaque("melee", gentil, gentil.movanicDeva(0).name, 0)
+          }
+          else if (!gentil.astralDeva.isEmpty) {
+            barOrc.attaque("melee", gentil, gentil.astralDeva(0).name, 0)
+          } else Breaks
+
+        }
+
+        for (worgsR <- mechant.worgsRider) {
+          if (!gentil.solar.isEmpty) {
+            worgsR.attaque("melee", gentil, gentil.solar(0).name, 0)
+          }
+          else if (!gentil.planetar.isEmpty) {
+            worgsR.attaque("melee", gentil, gentil.planetar(0).name, 0)
+          }
+          else if (!gentil.movanicDeva.isEmpty) {
+            worgsR.attaque("melee", gentil, gentil.movanicDeva(0).name, 0)
+          }
+          else if (!gentil.astralDeva.isEmpty) {
+            worgsR.attaque("melee", gentil, gentil.astralDeva(0).name, 0)
+          } else Breaks
+
+        }
+
+        if (gentil.solar.isEmpty) {
+          if (gentil.planetar.isEmpty) {
+            if (gentil.movanicDeva.isEmpty) {
+              if (gentil.astralDeva.isEmpty) {
+                println("Les gentils ont perdu")
+                fin = true
+              }
+            }
           }
         }
-      }
-      if (!mechant.barbareOrc.isEmpty) {
-        for (pla <- gentil.planetar) {
-          pla.attaque("melee", mechant, "babareOrc", 0)
+
+        if (mechant.greenGreatWyrmDragon.isEmpty) {
+          if (mechant.angelSlayer.isEmpty) {
+            if (mechant.warlord.isEmpty) {
+              if (mechant.barbareOrc.isEmpty) {
+                if (mechant.worgsRider.isEmpty) {
+                  println("Les gentils ont gagnés")
+                  fin = true
+                }
+              }
+            }
+          }
         }
-      }
-      if (!mechant.barbareOrc.isEmpty) {
-        for (mov <- gentil.movanicDeva) {
-          mov.attaque("melee", mechant, "babareOrc", 0)
-        }
-      }
-      if (!mechant.barbareOrc.isEmpty) {
-        for (ast <- gentil.astralDeva) {
-          ast.attaque("melee", mechant, "babareOrc", 0)
-        }
-      }
-      if (!gentil.solar.isEmpty) {
-        for (drake <- mechant.greenGreatWyrmDragon) {
-          // drake.attaque("melee", gentil, "solar", 0)
-        }
-      }
-      if (!gentil.solar.isEmpty) {
-        for (orc <- mechant.barbareOrc) {
-          orc.attaque("melee", gentil, "solar", 0)
-        }
-      }
-      if (!gentil.solar.isEmpty) {
-        for (ang <- mechant.angelSlayer) {
-          ang.attaque("melee", gentil, "solar", 0)
-        }
-      }
-      if (!gentil.solar.isEmpty) {
-        for (war <- mechant.warlord) {
-          war.attaque("melee", gentil, "solar", 0)
-        }
-      }
-      if (!gentil.solar.isEmpty) {
-        for (worg <- mechant.worgsRider) {
-          worg.attaque("melee", gentil, "solar", 0)
-        }
+
+        println("tour :" + tour)
+        println("dragon vide ? :"+mechant.greenGreatWyrmDragon.isEmpty)
+        println("nombre de solar :" + gentil.solar.size + " nombre de planetar :" + gentil.planetar.size + " nombre de mova :" + gentil.movanicDeva.size + " nombre d'astralDeva :" + gentil.astralDeva.size)
+        println("nombre de dragon :" + mechant.greenGreatWyrmDragon.size + " nombre de angelSlayer :" + mechant.angelSlayer.size + " nombre de warlord :" + mechant.warlord.size + " nombre de barbareOrc :" + mechant.barbareOrc.size + " nombre de wargsRider :" + mechant.worgsRider.size)
+        tour = tour + 1
+        if (tour > 120) break()
       }
 
     }
