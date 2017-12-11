@@ -1,7 +1,15 @@
 import org.apache.spark.{SparkConf, SparkContext}
 import org.jsoup.Jsoup
+
+// Import pour break les boucle while , for
 import scala.util.control.Breaks
 import scala.util.control.Breaks._
+
+// Import pour graphX
+import org.apache.spark._
+import org.apache.spark.graphx._
+// To make some of the examples work we will also need RDD
+import org.apache.spark.rdd.RDD
 
 
 import scala.collection.mutable.ArrayBuffer
@@ -9,14 +17,14 @@ import scala.collection.mutable.ArrayBuffer
 object Main {
   def main(args: Array[String]): Unit = {
     /*
-        var bestiaire = new ArrayBuffer[creature]()
+        var bestiaire = new ArrayBuffer[Bestiaire.creature]()
         val conf = new SparkConf().setAppName("blbl").setMaster("local[*]")
         val sc = new SparkContext(conf)
         sc.setLogLevel("WARN")
 
 
         // Creation du tableau de liens du bestiaire
-        var page = new RecuperationEtTraitementDonnée;
+        var page = new Bestiaire.RecuperationEtTraitementDonnée;
         page.getBestiaire("http://paizo.com/pathfinderRPG/prd/bestiary/", "monsterIndex.html");
         page.getBestiaire("http://paizo.com/", "pathfinderRPG/prd/bestiary2/additionalMonsterIndex.html");
         page.getBestiaire("http://paizo.com/", "pathfinderRPG/prd/bestiary3/monsterIndex.html");
@@ -29,18 +37,18 @@ object Main {
         // On creer toute les creatures du bestiare dans notre base de donnee
         for (lienCreature <- page.links) {
 
-          // On extrait le nom de la creature de son url
+          // On extrait le nom de la Bestiaire.creature de son url
           var nomCreature = lienCreature.split("#")
 
-          // On recupere les liens des spells de la creature
+          // On recupere les liens des spells de la Bestiaire.creature
           page.getSpell(lienCreature)
 
           if (nomCreature.size == 2) {
 
-            // On construit la creature et on la nomme
-            var Creature = new creature(nomCreature(1), lienCreature)
+            // On construit la Bestiaire.creature et on la nomme
+            var Creature = new Bestiaire.creature(nomCreature(1), lienCreature)
 
-            // On ajoute les liens des spells que la creature possede
+            // On ajoute les liens des spells que la Bestiaire.creature possede
             var tempSpell=page.getSpell(lienCreature);
             for (nomTemp <- tempSpell) {
               Creature.addspell(nomTemp);
@@ -48,7 +56,7 @@ object Main {
             bestiaire.append(Creature)
           }
         }
-        println("Creation creature done")
+        println("Creation Bestiaire.creature done")
 
         // Creation du tableau de liens de tout les spells
         for (url <- page.links) {
@@ -59,7 +67,7 @@ object Main {
         //println(page.spells);
 
         val rdd = sc.parallelize(bestiaire)
-        val rddSpell = rdd.map(creature => creature.spells.toList -> creature.name)
+        val rddSpell = rdd.map(Bestiaire.creature => Bestiaire.creature.spells.toList -> Bestiaire.creature.name)
         val y = rddSpell.flatMap { case (a, b) => a.map(_ -> b) }
         val z = y.reduceByKey((x, y) => x + ";" + y)
         val sorted = z.collect().sortBy(pair => pair._1)
@@ -84,9 +92,9 @@ object Main {
         */
 
     // Test de combat sans IA
-
-    var gentil = new PartySolar(1, 2, 2, 5)
-    var mechant = new PartyWyrm(1, 200, 10, 0, 0)
+    /*
+    var gentil = new GestionCombat.PartySolar(1, 2, 2, 5)
+    var mechant = new GestionCombat.PartyWyrm(1, 200, 10, 0, 0)
     var fin = false
     var tour = 1
 
@@ -280,6 +288,9 @@ object Main {
       }
 
     }
+*/
+
+    // Test graphX
 
   }
 

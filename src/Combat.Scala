@@ -1,4 +1,5 @@
 
+import Bestiaire.creature
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.SparkContext
 import org.apache.spark.graphx.{Edge, EdgeContext, EdgeTriplet, Graph, _}
@@ -19,9 +20,9 @@ import scala.util.Random
 
 //Having this inside GraphColoring caused so many problems omg
 //ids are randomized
-class node(var color: Int = 1, var creat: creature = new creature("Solar", "http://www.d20pfsrd.com/bestiary/monster-listings/outsiders/angel/solar"), var id: VertexId = 1L) extends Serializable {
+class node(var color: Int = 1, var creat: creature = new creature("Combattants.Solar", "http://www.d20pfsrd.com/bestiary/monster-listings/outsiders/angel/solar"), var id: VertexId = 1L) extends Serializable {
   //Utile pour imprimer le graphe après
-  override def toString: String = s"id : $id color, $color creature : $creat "
+  override def toString: String = s"id : $id color, $color Bestiaire.creature : $creat "
 }
 
 object Graphs extends Serializable {
@@ -385,7 +386,7 @@ object testPetersenGraph extends App {
   sc.setLogLevel("ERROR")
 
   var myVertices = sc.makeRDD(Array(
-    (1L, new node(id = 1L), new creature("Solar","http://www.d20pfsrd.com/bestiary/monster-listings/outsiders/angel/solar")), //A
+    (1L, new node(id = 1L), new creature("Combattants.Solar","http://www.d20pfsrd.com/bestiary/monster-listings/outsiders/angel/solar")), //A
     (2L, new node(id = 2)), //B
     (3L, new node(id = 3)), //C
     (4L, new node(id = 4)), //D
