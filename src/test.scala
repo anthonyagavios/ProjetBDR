@@ -13,7 +13,7 @@ object test extends App{
     }
   }
 
-  var solar = new creature("Solar")
+  var solar = new creature("Combattants.Solar")
   solar.addspell("cure light wounds")
   solar.addspell("heal")
   var test = new creature("test")

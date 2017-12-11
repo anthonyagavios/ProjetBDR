@@ -1,22 +1,25 @@
+package Bestiaire
+
 import org.jsoup.Jsoup
-import scala.collection.mutable.{ArrayBuffer, ListBuffer}
+
+import scala.collection.mutable.ArrayBuffer
 
 class RecuperationEtTraitementDonnée {
   var links = new ArrayBuffer[String]()
 
 
-  // Fonction qui retourne un tableau de liens url correspondant aux spells d'une creature
+  // Fonction qui retourne un tableau de liens url correspondant aux spells d'une Bestiaire.creature
   def getSpell(url: String): ArrayBuffer[String] = {
 
     var spells = new ArrayBuffer[String]()
-    // Les liens url des creature traiter dans getBestiaire
+    // Les liens url des Bestiaire.creature traiter dans getBestiaire
     // Pour la phase de devellopement et de test for(url<-links){
 
     try {
       var conn = Jsoup.connect(url)
       var doc = conn.get()
 
-      // On extrait le nom de la creature de son url
+      // On extrait le nom de la Bestiaire.creature de son url
       var nom = url.split("#")
 
       if (nom.length == 2) {
@@ -61,7 +64,7 @@ class RecuperationEtTraitementDonnée {
   }
 
 
-  // Cette fonction permet d'extraire de la page web le bestiaire et les liens url pointant vers la description de chaque creature
+  // Cette fonction permet d'extraire de la page web le bestiaire et les liens url pointant vers la description de chaque Bestiaire.creature
   def getBestiaire(urlToCrawl: String, urlOption: String): Unit = {
     try {
       var conn = Jsoup.connect(urlToCrawl + urlOption)
@@ -76,7 +79,7 @@ class RecuperationEtTraitementDonnée {
 
       for (a <- 0 to elements.size() - 1) {
 
-        // On ajoute le liens de la creature dans un tableau qui constitura notre bestiaire
+        // On ajoute le liens de la Bestiaire.creature dans un tableau qui constitura notre bestiaire
         links.append(urlToCrawl + "/" + elements.get(a).attr("href"));
       }
     }
