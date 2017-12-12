@@ -644,7 +644,7 @@ object testFolderCalculs extends App {
 }
 
 
-object testPetersenGraph extends App {
+object testPetersenGraph extends App{
 
   val conf = new SparkConf()
     .setAppName("Petersen Graph (10 nodes) test")
