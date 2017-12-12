@@ -1,9 +1,10 @@
+package Graph
+
 
 import Bestiaire.creature
+import Combattants.{BarbareOrc, Solar, Warlord, WorgsRider}
+import org.apache.spark.graphx.{Edge, EdgeContext, Graph, _}
 import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.spark.SparkContext
-import org.apache.spark.graphx.{Edge, EdgeContext, EdgeTriplet, Graph, _}
-import org.apache.spark.util.LongAccumulator
 
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Random

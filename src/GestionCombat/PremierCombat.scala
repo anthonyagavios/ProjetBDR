@@ -1,5 +1,5 @@
 import GestionCombat.{PartySolar, PartyWyrm}
-
+/*
 var gentil = new PartySolar(1, 0, 0, 0)
 var mechant = new PartyWyrm(0, 4, 0, 9, 1)
 
@@ -23,4 +23,4 @@ else if (distance < 7) {
 
 // Deplacement
 
-
+*/

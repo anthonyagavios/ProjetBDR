@@ -2,13 +2,13 @@ package Combattants
 
 import GestionCombat.PartySolar
 
-class AngelSlayer() {
-  var name = "angelSlayer"
-  var initiative=7
-  var HP = 112;
-  var AC = 26;
+class AngelSlayer() extends Combattant{
+   var name = "angelSlayer"
+   var initiative=7
+   var HP = 112;
+   var AC = 26;
 
-  def jetDeDes(): Int = {
+  override def jetDeDes(): Int = {
     // Jet de des en random avec une limite à 20
     val rand = scala.util.Random
     var jetDes = rand.nextInt(20)
@@ -133,7 +133,7 @@ class AngelSlayer() {
   }
 
 
-  def priseDeDegats(dammage: Int): Unit = {
+  override def priseDeDegats(dammage: Int): Unit = {
     HP = HP - dammage;
   }
 }

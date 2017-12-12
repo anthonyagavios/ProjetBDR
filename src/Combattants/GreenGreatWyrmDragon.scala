@@ -3,13 +3,13 @@ package Combattants
 import GestionCombat.PartySolar
 
 
-class GreenGreatWyrmDragon() {
+class GreenGreatWyrmDragon() extends Combattant{
   var name = "greenGreatWyrmDragon"
   var initiative=2
   var HP = 391;
   var AC = 37;
 
-  def jetDeDes(): Int = {
+  override def jetDeDes(): Int = {
     // Jet de des en random avec une limite à 20
     val rand = scala.util.Random
     var jetDes = rand.nextInt(20)
@@ -130,7 +130,7 @@ class GreenGreatWyrmDragon() {
     return 0;
   }
 
-  def priseDeDegats(dammage: Int): Unit = {
+  override def priseDeDegats(dammage: Int): Unit = {
     HP = HP - dammage;
   }
 }

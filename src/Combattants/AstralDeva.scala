@@ -2,20 +2,20 @@ package Combattants
 
 import GestionCombat.PartyWyrm
 
-class AstralDeva() {
+class AstralDeva() extends Combattant{
   var name = "astralDeva"
   var initiative=8
   var HP = 172;
   var AC = 29;
 
-  def jetDeDes(): Int = {
+  override def jetDeDes(): Int = {
     // Jet de des en random avec une limite à 20
     val rand = scala.util.Random
     var jetDes = rand.nextInt(20)
     return jetDes;
   }
 
-  def attaqueMelee(ennemi: PartyWyrm, nomEnnemi: String, numero: Int): Int = {
+  override def attaqueMelee(ennemi: PartyWyrm, nomEnnemi: String, numero: Int): Int = {
 
 
     if (nomEnnemi == "angelSlayer") {
@@ -85,7 +85,7 @@ class AstralDeva() {
     return 0;
   }
 
-  def priseDeDegats(dammage: Int): Unit = {
+  override def priseDeDegats(dammage: Int): Unit = {
     HP = HP - dammage;
   }
 }

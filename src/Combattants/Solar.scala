@@ -1,23 +1,22 @@
 package Combattants
 
+import Bestiaire.creature
 import GestionCombat.PartyWyrm
 
-class Solar() {
-  var name = "solar";
+class Solar() extends Combattant{
+  var name = "solar"
   var initiative=9
-  var HP = 363;
-  var AC = 44;
+  var HP = 363
+  var AC = 44
 
-  def jetDeDes(): Int = {
+  override def jetDeDes(): Int = {
     // Jet de des en random avec une limite à 20
     val rand = scala.util.Random
     var jetDes = rand.nextInt(20)
     return jetDes;
   }
 
-
-
-  def attaqueMelee( ennemi: PartyWyrm, nomEnnemi: String, numero: Int): Int = {
+  override def attaqueMelee(ennemi: PartyWyrm, nomEnnemi: String, numero: Int): Int = {
     if (nomEnnemi == "angelSlayer") {
       for (att <- 0 to 3) {
         if (jetDeDes() + (35 - 5 * att) > ennemi.angelSlayer(numero).AC) {
@@ -88,7 +87,7 @@ class Solar() {
     return 0;
   }
 
-  def attaqueDistance(ennemi: PartyWyrm, nomEnnemi: String, numero: Int): Int = {
+  override def attaqueDistance(ennemi: PartyWyrm, nomEnnemi: String, numero: Int): Int = {
 
     if (nomEnnemi == "angelSlayer") {
       for (att <- 0 to 3) {
@@ -159,13 +158,13 @@ class Solar() {
 
   }
 
-  def attaqueMagic(){}
+  override def attaqueMagic(){}
 
-  def regeneration(): Unit ={
+  override def regeneration(): Unit ={
     HP=HP+15;
   }
 
-  def priseDeDegats(dammage: Int): Unit = {
+  override def priseDeDegats(dammage: Int): Unit = {
     HP = HP - dammage;
   }
 

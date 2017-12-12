@@ -2,13 +2,13 @@ package Combattants
 
 import GestionCombat.PartySolar
 
-class WorgsRider() {
-  var name = "worgsRider"
-  var initiative=2
-  var HP = 13;
-  var AC = 18;
+class WorgsRider() extends Combattant{
+  override var name = "worgsRider"
+  override var initiative=2
+  override var HP = 13;
+  override var AC = 18;
 
-  def jetDeDes(): Int = {
+  override def jetDeDes(): Int = {
     // Jet de des en random avec une limite à 20
     val rand = scala.util.Random
     var jetDes = rand.nextInt(20)
@@ -130,7 +130,7 @@ class WorgsRider() {
     return 0
   }
 
-  def priseDeDegats(dammage: Int): Unit = {
+  override def priseDeDegats(dammage: Int): Unit = {
     HP = HP - dammage;
   }
 }
