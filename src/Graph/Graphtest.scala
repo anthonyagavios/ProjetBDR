@@ -11,7 +11,7 @@ import org.apache.spark.network.protocol.Message
 
 
 
-object MainGraph {
+object Graphtest {
 
   def main(args: Array[String]): Unit = {
 

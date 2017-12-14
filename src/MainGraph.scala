@@ -1,11 +1,12 @@
-import Combattants.{Combattant,BarbareOrc, Solar, Warlord, WorgsRider}
+import Combattants._
+import GestionCombat.{PartySolar, PartyWyrm}
 import Graph.{Vertice, node}
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.graphx.Edge
 import org.graphstream.graph.{Edge, Node}
 import org.graphstream.graph.implementations.SingleGraph
 
-object testGraph extends App {
+object MainGraph extends App {
   System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer")
   val graph = new SingleGraph("Tutorial 1")
 
@@ -160,7 +161,7 @@ node#Worgs7{
     .setMaster("local[*]")
   val sc = new SparkContext(conf)
   sc.setLogLevel("ERROR")
-  var myVertices = sc.makeRDD(Array(
+ /* var myVertices = sc.makeRDD(Array(
     Vertice(1L, new node(id = 1L, new Solar())),
     Vertice(2L, new node(id = 2L, new WorgsRider())),
     Vertice(3L, new node(id = 3L, new WorgsRider())),
@@ -174,21 +175,67 @@ node#Worgs7{
     Vertice(11L, new node(id = 11L, new BarbareOrc())),
     Vertice(12L, new node(id = 12L, new BarbareOrc())),
     Vertice(13L, new node(id = 13L, new BarbareOrc())),
-    Vertice(14L, new node(id = 14L, new BarbareOrc())))) 
+    Vertice(14L, new node(id = 14L, new BarbareOrc())))) */
 
+  val partysolar : PartySolar = new PartySolar(1,0,0,0)
+  val partywyrm : PartyWyrm = new PartyWyrm(0,4,0,9,1)
+
+  var numbercombattants : Int = partysolar.solar.length+partysolar.astralDeva.length+partysolar.movanicDeva.length + partysolar.planetar.length
+  numbercombattants+= partywyrm.angelSlayer.length+partywyrm.barbareOrc.length+partywyrm.greenGreatWyrmDragon.length+partywyrm.warlord.length+partywyrm.worgsRider.length
+  var vertices = new Array[Vertice](numbercombattants)
+
+  var i : Int = 0
+  for(creature<-partysolar.solar){
+    vertices(i)= Vertice(i, new node(id = i, new Solar()))
+    i+=1
+  }
+  for(creature<-partysolar.planetar){
+    vertices(i)= Vertice(i, new node(id = i, new Planetar()))
+    i+=1
+  }
+  for(creature<-partysolar.movanicDeva){
+    vertices(i)= Vertice(i, new node(id = i, new MovanicDeva()))
+    i+=1
+  }
+  for(creature<-partysolar.astralDeva){
+    vertices(i)= Vertice(i, new node(id = i, new AstralDeva()))
+    i+=1
+  }
+  for(creature<-partywyrm.greenGreatWyrmDragon){
+    vertices(i)= Vertice(i, new node(id = i, new GreenGreatWyrmDragon()))
+    i+=1
+  }
+  for(creature<-partywyrm.worgsRider){
+    vertices(i)= Vertice(i, new node(id = i, new WorgsRider()))
+    i+=1
+  }
+  for(creature<-partywyrm.barbareOrc){
+    vertices(i)= Vertice(i, new node(id = i, new BarbareOrc()))
+    i+=1
+  }
+  for(creature<-partywyrm.warlord){
+    vertices(i)= Vertice(i, new node(id = i, new Warlord()))
+    i+=1
+  }
+  for(creature<-partywyrm.angelSlayer){
+    vertices(i)= Vertice(i, new node(id = i, new AngelSlayer()))
+    i+=1
+  }
+
+  var myVertices = sc.makeRDD(vertices)
 
   var nodes = new Array[Node](myVertices.collect().length)
-  var i : Int = 0
+  var n : Int = 0
   for(vertice<-myVertices){
 
     val x = scala.util.Random
     val y = scala.util.Random
-    val nodex : Node = graph.addNode(vertice.node.combatant.name + i.toString)
+    val nodex : Node = graph.addNode(vertice.node.combatant.name + n.toString)
     nodex.setAttribute("xy", Array[Double](x.nextInt(20), y.nextInt(20)))
     nodex.setAttribute("ui.label", vertice.node.combatant.name)
 
-    nodes(i) = nodex
-    i+=1
+    nodes(n) = nodex
+    n+=1
   }
 
 /*
