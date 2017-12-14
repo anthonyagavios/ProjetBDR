@@ -6,8 +6,10 @@ import GestionCombat.PartyWyrm
 class Solar() extends Combattant{
   var name = "solar"
   var initiative=9
-  var HP = 363
-  var AC = 44
+  var vitesse=50
+  var HP = 363;
+  var AC = 44;
+
 
   override def jetDeDes(): Int = {
     // Jet de des en random avec une limite à 20
@@ -161,7 +163,8 @@ class Solar() extends Combattant{
   override def attaqueMagic(){}
 
   override def regeneration(): Unit ={
-    HP=HP+15;
+    if (HP+15>363)HP=363
+    else HP=HP+15;
   }
 
   override def priseDeDegats(dammage: Int): Unit = {

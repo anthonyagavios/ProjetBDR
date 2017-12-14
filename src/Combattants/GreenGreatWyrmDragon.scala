@@ -6,6 +6,7 @@ import GestionCombat.PartySolar
 class GreenGreatWyrmDragon() extends Combattant{
   var name = "greenGreatWyrmDragon"
   var initiative=2
+  var vitesse=40
   var HP = 391;
   var AC = 37;
 
@@ -16,7 +17,7 @@ class GreenGreatWyrmDragon() extends Combattant{
     return jetDes;
   }
 
-  def attaqueMelee(typeAttaque: String, ennemi: PartySolar, nomEnnemi: String, numero: Int): Int = {
+  def attaqueMelee( ennemi: PartySolar, nomEnnemi: String, numero: Int): Int = {
 
 
     if (nomEnnemi == "solar") {
@@ -75,6 +76,7 @@ class GreenGreatWyrmDragon() extends Combattant{
   }
 
   def attaqueMagic(ennemi: PartySolar, nomEnnemi: String, numero: Int): Int = {
+   
     if (nomEnnemi == "solar") {
       for (att <- 0 to 0) {
         if (jetDeDes() + (33 - 5 * att) > ennemi.solar(numero).AC) {

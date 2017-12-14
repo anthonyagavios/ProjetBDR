@@ -2,11 +2,15 @@ package Combattants
 
 import GestionCombat.PartySolar
 
+
 class AngelSlayer() extends Combattant{
-   var name = "angelSlayer"
-   var initiative=7
-   var HP = 112;
-   var AC = 26;
+
+  var name = "angelSlayer"
+  var initiative=7
+  var vitesse=40
+  var HP = 112;
+  var AC = 26;
+
 
   override def jetDeDes(): Int = {
     // Jet de des en random avec une limite à 20

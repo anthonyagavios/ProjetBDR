@@ -219,6 +219,7 @@ class Terrain {
       }
     }
 
+
     // Ajout des coordonnées pour les solars
     var x = 10
     var y = 0

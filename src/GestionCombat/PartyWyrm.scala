@@ -42,43 +42,6 @@ class PartyWyrm(nombreDeWyrm: Int, nombreDeBarbareOrc: Int, nombreDeAngelSlayer:
     }
   }
 
-  def miseAjour(): Unit = {
-    if (!barbareOrc.isEmpty) {
-      for (numero <- 0 to barbareOrc.size) {
-        if (barbareOrc(numero).HP <= 0) {
-          barbareOrc.remove(numero)
-        }
-      }
-    } else if (!angelSlayer.isEmpty) {
-      for (numero <- 0 to angelSlayer.size) {
-        if (angelSlayer(numero).HP <= 0) {
-          angelSlayer.remove(numero)
-        }
-      }
-    }
-    else if (!worgsRider.isEmpty) {
-      for (numero <- 0 to worgsRider.size) {
-        if (worgsRider(numero).HP <= 0) {
-          worgsRider.remove(numero)
-        }
-      }
-    }
-    else if (!warlord.isEmpty) {
-      for (numero <- 0 to warlord.size) {
-        if (warlord(numero).HP <= 0) {
-          warlord.remove(numero)
-        }
-      }
-    }
-    else if (!greenGreatWyrmDragon.isEmpty) {
-      for (numero <- 0 to greenGreatWyrmDragon.size) {
-        if (greenGreatWyrmDragon(numero).HP <= 0) {
-          greenGreatWyrmDragon.remove(numero)
-        }
-      }
-    } else {
-      println("Combat terminé : win")
-    }
-  }
+
 
 }

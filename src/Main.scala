@@ -11,6 +11,8 @@ import org.apache.spark.graphx._
 // To make some of the examples work we will also need RDD
 import org.apache.spark.rdd.RDD
 
+import GestionCombat._
+
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -291,6 +293,12 @@ object Main {
 */
 
     // Test graphX
+
+    // Combat
+    var combat =new Combat
+    combat.premierCombat()
+
+
 
   }
 

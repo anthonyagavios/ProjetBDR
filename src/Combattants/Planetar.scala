@@ -5,6 +5,7 @@ import GestionCombat.PartyWyrm
 class Planetar() extends Combattant{
   var name = "planetar"
   var initiative=8
+  var vitesse=30
   var HP = 229;
   var AC = 32;
 

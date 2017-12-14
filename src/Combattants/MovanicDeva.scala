@@ -5,6 +5,7 @@ import GestionCombat.PartyWyrm
 class MovanicDeva() extends Combattant{
   var name = "movanicDeva"
   var initiative=7
+  var vitesse=40
   var HP = 126;
   var AC = 24;
 

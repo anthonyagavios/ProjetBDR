@@ -5,6 +5,7 @@ import GestionCombat.PartySolar
 class Warlord() extends Combattant{
   var name = "warlord"
   var initiative=2
+  var vitesse=30
   var HP = 141;
   var AC = 27;
 

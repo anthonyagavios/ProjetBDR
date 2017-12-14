@@ -5,6 +5,7 @@ import GestionCombat.PartyWyrm
 class AstralDeva() extends Combattant{
   var name = "astralDeva"
   var initiative=8
+  var vitesse=50
   var HP = 172;
   var AC = 29;
 

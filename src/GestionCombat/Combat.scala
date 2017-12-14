@@ -31,8 +31,6 @@ class Combat {
     var terrain = new Terrain
     terrain.constructionTerrain(gentil, mechant, distanceWorgs, distanceOrc, distanceWarlord, 0, 0)
 
-
-    // TODO Manque une verification, isEmpty, sur les Arraybuffer
     while (!fin) {
 
       println("tour :" + tour)
@@ -43,6 +41,7 @@ class Combat {
       // Attaque l'ennemie le plus proche
 
       var cibleSolar = ""
+
       if (distanceOrc < distanceWarlord && distanceOrc < distanceWorgs && !mechant.barbareOrc.isEmpty || (mechant.warlord.isEmpty && mechant.worgsRider.isEmpty)) {
         cibleSolar = mechant.barbareOrc(0).name
       }
@@ -186,5 +185,220 @@ class Combat {
     }
   }
 
-  def deuxiemeCombat() {}
+  def deuxiemeCombat(): Unit = {
+    var gentil = new PartySolar(1, 2, 2, 5)
+    var mechant = new PartyWyrm(1, 200, 10, 0, 0)
+
+    var distanceOrc = 110
+    var distanceWyrm = 130
+    var distanceAngel = 120
+
+    var sizeOrc = mechant.barbareOrc.size
+    var sizeWyrm = mechant.greenGreatWyrmDragon.size
+    var sizeAngelSlayer = mechant.angelSlayer.size
+
+    var sizeSolar = gentil.solar.size
+    var sizeMovanicDeva = gentil.movanicDeva.size
+    var sizeAstralDeva = gentil.astralDeva.size
+    var sizePlanetar = gentil.planetar.size
+
+    var fin = false
+    var tour = 0
+
+    var numeroOrc = 0
+    var numeroWyrm = 0
+    var numeroAngelSlayer = 0
+
+    var numeroSolar = 0
+    var numeroPlanetar = 0
+    var nuemeroMovanicDeva = 0
+    var numeroAstralDeva = 0
+
+    var terrain = new Terrain
+    terrain.constructionTerrain(gentil, mechant, 0, distanceOrc, 0, distanceWyrm, distanceAngel)
+
+    while (!fin) {
+
+      println("tour :" + tour)
+
+      // Attaque a distance tant que les orc ne sont pas au corp a corp pour le solar
+      // Les orc ne font que des attaques corp a corp donc il avance tant qu'ils ne peuvent pas attaquer
+      // Attaque toujours la meme cible tant que celle ci est vivante
+      // Attaque l'ennemie le plus proche
+
+      var cibleSolar = ""
+      var ciblePlanetar = ""
+      var cibleMovanicDeva = ""
+      var cibleAstralDeva = ""
+
+      var cibleWyrm = ""
+      var cibleAngelSlayer = ""
+      var cibleBarbareOrc = ""
+      var envol = false
+
+
+      if (distanceOrc < distanceAngel && distanceOrc < distanceWyrm && !mechant.barbareOrc.isEmpty || (mechant.angelSlayer.isEmpty && mechant.greenGreatWyrmDragon.isEmpty)) {
+        cibleSolar = mechant.barbareOrc(0).name
+      }
+      else if (distanceWyrm < distanceAngel && !envol && !mechant.greenGreatWyrmDragon.isEmpty || (mechant.angelSlayer.isEmpty && mechant.barbareOrc.isEmpty)) {
+        cibleSolar = mechant.greenGreatWyrmDragon(0).name
+      }
+      else if (!mechant.angelSlayer.isEmpty || (mechant.greenGreatWyrmDragon.isEmpty && mechant.barbareOrc.isEmpty)) {
+        cibleSolar = mechant.angelSlayer(0).name
+      }
+
+      // Attaque a distance
+      if ((distanceOrc > 7 && distanceOrc < 110) || (distanceAngel > 7 && distanceAngel < 110) || (distanceWyrm > 7 && distanceWyrm < 110)) {
+        if (cibleSolar == mechant.barbareOrc(0).name) {
+          cibleSolar = mechant.barbareOrc(0).name
+          gentil.solar(0).attaqueDistance(mechant, mechant.barbareOrc(0).name, 0)
+
+        }
+
+        else if (cibleSolar == mechant.angelSlayer(0).name) {
+          cibleSolar = mechant.angelSlayer(0).name
+          gentil.solar(0).attaqueDistance(mechant, mechant.angelSlayer(0).name, 0)
+
+        }
+
+        else if (cibleSolar == mechant.greenGreatWyrmDragon(0).name) {
+          cibleSolar = mechant.greenGreatWyrmDragon(0).name
+          gentil.solar(0).attaqueDistance(mechant, mechant.greenGreatWyrmDragon(0).name, 0)
+
+
+        }
+      }
+      // Attaque au corp a corp
+      else if (distanceOrc < 7 || distanceWyrm < 7 || distanceAngel < 7) {
+        if (!mechant.barbareOrc.isEmpty && cibleSolar == mechant.barbareOrc(0).name) {
+
+          cibleSolar = mechant.barbareOrc(0).name
+          gentil.solar(0).attaqueMelee(mechant, mechant.barbareOrc(0).name, 0)
+
+
+        } else if (!mechant.greenGreatWyrmDragon.isEmpty && cibleSolar == mechant.greenGreatWyrmDragon(0).name) {
+
+          cibleSolar = mechant.greenGreatWyrmDragon(0).name
+          gentil.solar(0).attaqueMelee(mechant, mechant.greenGreatWyrmDragon(0).name, 0)
+
+
+        } else if (!mechant.angelSlayer.isEmpty && cibleSolar == mechant.angelSlayer(0).name) {
+
+          cibleSolar = mechant.angelSlayer(0).name
+          gentil.solar(0).attaqueMelee(mechant, mechant.angelSlayer(0).name, 0)
+
+
+        }
+        for (pla <- gentil.planetar) {
+          pla.attaqueMelee(mechant, mechant.angelSlayer(0).name, 0)
+        }
+        if (tour == 0) {
+          for (wyrm <- mechant.greenGreatWyrmDragon) {
+            wyrm.attaqueMelee(gentil, gentil.solar(0).name, 0)
+          }
+        } else //TODO attaque magique
+
+          for (wyrm <- mechant.greenGreatWyrmDragon) {
+            wyrm.attaqueMelee(gentil, gentil.solar(0).name, 0)
+            envol = true
+            distanceWyrm = 55
+          }
+        for (ang <- mechant.angelSlayer) {
+          ang.attaqueMelee(gentil, gentil.solar(0).name, 0)
+        }
+        for (orc <- mechant.barbareOrc) {
+          orc.attaqueMelee(gentil, gentil.solar(0).name, 0)
+        }
+
+      }
+
+      // Attaque magic
+
+
+      // Fuite
+      if (mechant.greenGreatWyrmDragon.isEmpty && mechant.angelSlayer.isEmpty && mechant.barbareOrc.size == 1) {
+        println("Le dernier Orc a fui la bataille")
+        println("Victoire pour le Solar")
+        fin = true
+      }
+
+      // Deplacement
+      if (!mechant.barbareOrc.isEmpty) {
+        if (distanceOrc - mechant.barbareOrc(0).vitesse > 7 && distanceOrc > 0) {
+          distanceOrc = distanceOrc - mechant.barbareOrc(0).vitesse
+        } else if (distanceOrc - mechant.barbareOrc(0).vitesse < 0 || distanceOrc - mechant.barbareOrc(0).vitesse < 7) {
+          distanceOrc = 2
+        }
+      }
+      if (!mechant.angelSlayer.isEmpty) {
+        if (distanceAngel - mechant.angelSlayer(0).vitesse > 7 && distanceAngel > 0) {
+          distanceAngel = distanceAngel - mechant.angelSlayer(0).vitesse
+        } else if (distanceAngel - mechant.angelSlayer(0).vitesse < 0 || distanceAngel - mechant.angelSlayer(0).vitesse < 7) {
+          distanceAngel = 3
+        }
+      }
+      if (!mechant.greenGreatWyrmDragon.isEmpty) {
+        if (distanceWyrm - mechant.greenGreatWyrmDragon(0).vitesse > 7 && distanceWyrm > 0) {
+          distanceWyrm = distanceWyrm - mechant.greenGreatWyrmDragon(0).vitesse
+        } else if (distanceWyrm - mechant.greenGreatWyrmDragon(0).vitesse < 0 || distanceWyrm - mechant.greenGreatWyrmDragon(0).vitesse < 7) {
+          distanceWyrm = 4
+        }
+      }
+
+
+      // Fin de tour
+
+      // Test de victoire
+      if (mechant.greenGreatWyrmDragon.isEmpty && mechant.angelSlayer.isEmpty && mechant.barbareOrc.isEmpty) {
+        println("Victoire du Solar")
+        fin = true
+      } else if (gentil.solar.isEmpty) {
+        println("Defaite du Solar")
+        fin = true
+      }
+
+      // Mise a jour du nombre de noeuds
+      if (sizeOrc - mechant.barbareOrc.size != 0) {
+        for (i <- 0 to (sizeOrc - mechant.barbareOrc.size - 1)) {
+          terrain.graph.removeNode("BarbaresOrc" + numeroOrc)
+          sizeOrc = mechant.barbareOrc.size
+          numeroOrc += 1
+        }
+      }
+
+      if (sizeWyrm - mechant.greenGreatWyrmDragon.size != 0) {
+        for (i <- 0 to (sizeWyrm - mechant.greenGreatWyrmDragon.size - 1)) {
+          terrain.graph.removeNode("GreatGreenWyrmDragon" + numeroWyrm)
+          sizeWyrm = mechant.greenGreatWyrmDragon.size
+          numeroWyrm += 1
+        }
+      }
+
+      if (sizeAngelSlayer - mechant.angelSlayer.size != 0) {
+        for (i <- 0 to (sizeAngelSlayer - mechant.angelSlayer.size - 1)) {
+          terrain.graph.removeNode("AngelSlayer" + numeroAngelSlayer)
+          sizeAngelSlayer = mechant.angelSlayer.size
+          numeroAngelSlayer += 1
+        }
+      }
+
+      gentil.solar(0).regeneration()
+
+
+      terrain.updateDistance(0, distanceOrc, 0, distanceWyrm, distanceAngel)
+      Thread.sleep(1000)
+
+      println("Il reste " + mechant.barbareOrc.size + " barbareOrc")
+      println("Il reste " + mechant.greenGreatWyrmDragon.size + " greatGreenWyrmDragon")
+      println("Il reste " + mechant.angelSlayer.size + " angelSlayer")
+
+      println("Il reste " + gentil.solar.size + " solar")
+      println("Il reste " + gentil.planetar.size + " planetar")
+      println("Il reste " + gentil.movanicDeva.size + " movanicDeva")
+      println("Il reste " + gentil.astralDeva.size + " astralDeva")
+
+      tour += 1
+    }
+  }
+
 }

@@ -2,11 +2,15 @@ package Combattants
 
 import GestionCombat.PartySolar
 
-class WorgsRider() extends Combattant{
-  override var name = "worgsRider"
-  override var initiative=2
-  override var HP = 13;
-  override var AC = 18;
+
+class WorgsRider() extends Combattant {
+
+  var name = "worgsRider"
+  var initiative = 2
+  var vitesse = 20
+  var HP = 13;
+  var AC = 18;
+
 
   override def jetDeDes(): Int = {
     // Jet de des en random avec une limite à 20
@@ -15,7 +19,7 @@ class WorgsRider() extends Combattant{
     return jetDes;
   }
 
-  def attaque(typeAttaque: String, ennemi: PartySolar, nomEnnemi: String, numero: Int): Int = {
+  def attaqueMelee(ennemi: PartySolar, nomEnnemi: String, numero: Int): Int = {
 
 
     if (nomEnnemi == "solar") {
