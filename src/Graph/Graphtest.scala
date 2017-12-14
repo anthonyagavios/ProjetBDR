@@ -1,9 +1,15 @@
 package Graph
 
-import Bestiaire.creature
+
 import Combattants.{BarbareOrc, Solar, Warlord, WorgsRider}
-import org.apache.spark.graphx.{Edge, VertexId}
+import io.netty.buffer.ByteBuf
 import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.SparkContext
+import org.apache.spark.graphx.{Edge, EdgeContext, EdgeTriplet, Graph, _}
+import org.apache.spark.network.buffer.ManagedBuffer
+import org.apache.spark.network.protocol.Message
+
+
 
 object MainGraph {
 
@@ -16,20 +22,20 @@ object MainGraph {
     sc.setLogLevel("ERROR")
 
     var myVertices = sc.makeRDD(Array(
-      Vertice(1L, new node(id = 1L), new Solar()), //A
-      Vertice(2L, new node(id = 2L), new WorgsRider()), //B
-      Vertice(3L, new node(id = 3L), new WorgsRider()), //C
-      Vertice(4L, new node(id = 4L), new WorgsRider()), //D
-      Vertice(5L, new node(id = 5L), new WorgsRider()), //E
-      Vertice(6L, new node(id = 6L), new WorgsRider()), //F
-      Vertice(7L, new node(id = 7L), new WorgsRider()), //G
-      Vertice(8L, new node(id = 8L), new WorgsRider()), //H
-      Vertice(9L, new node(id = 9L), new WorgsRider()), //I
-      Vertice(10L, new node(id = 10L), new Warlord()),
-      Vertice(11L, new node(id = 11L), new BarbareOrc()),
-      Vertice(12L, new node(id = 12L), new BarbareOrc()),
-      Vertice(13L, new node(id = 13L), new BarbareOrc()),
-      Vertice(14L, new node(id = 14L), new BarbareOrc()))) //J
+      Vertice(1L, new node(id = 1L, new Solar())), //A
+      Vertice(2L, new node(id = 2L, new WorgsRider())), //B
+      Vertice(3L, new node(id = 3L, new WorgsRider())), //C
+      Vertice(4L, new node(id = 4L, new WorgsRider())), //D
+      Vertice(5L, new node(id = 5L, new WorgsRider())), //E
+      Vertice(6L, new node(id = 6L, new WorgsRider())), //F
+      Vertice(7L, new node(id = 7L, new WorgsRider())), //G
+      Vertice(8L, new node(id = 8L, new WorgsRider())), //H
+      Vertice(9L, new node(id = 9L, new WorgsRider())), //I
+      Vertice(10L, new node(id = 10L, new Warlord())),
+      Vertice(11L, new node(id = 11L, new BarbareOrc())),
+      Vertice(12L, new node(id = 12L, new BarbareOrc())),
+      Vertice(13L, new node(id = 13L, new BarbareOrc())),
+      Vertice(14L, new node(id = 14L, new BarbareOrc())))) //J
 
     //15 EDGES
     //Petersen graph
@@ -49,9 +55,38 @@ object MainGraph {
     for (edge <- myEdges) println(edge.attr)
 
     //println(myVertices.collect().length)
-    for (vertice <- myVertices) println(vertice.combattant)
+    for (vertice <- myVertices) println(vertice.node.combatant.name)
 
+    var myGraph = Graph(myVertices, myEdges)
 
+    val vertice_and_messages = myGraph.aggregateMessages[VertexId](
+      sendAttCreature() //use an optimized join strategy (we don't need the edge attribute)
+    )
   }
+
+  def sendAttCreature(ctx: EdgeContext[node, String, String]) : Unit = {
+
+    //Do we send to a given vertex. SRC or DST.
+      ctx.sendToDst( ctx.srcAttr.combatant.name)
+      ctx.sendToSrc( ctx.dstAttr.combatant.name)
+  }
+
 }
+/*
+class Graph[RDD[Vertice], ED] {
+  def aggregateMessages[Msg: ClassTag](
+                                        sendMsg: EdgeContext[VD, ED, Msg] => Unit,
+                                        mergeMsg: (Msg, Msg) => Msg,
+                                        tripletFields: TripletFields = TripletFields.All): VertexRDD[Msg]
+}
+
+object Graphs extends Serializable{
+
+
+}
+*/
+
+
+
+
 
