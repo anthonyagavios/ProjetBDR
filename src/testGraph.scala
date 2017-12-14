@@ -1,3 +1,7 @@
+import Combattants.{Combattant,BarbareOrc, Solar, Warlord, WorgsRider}
+import Graph.{Vertice, node}
+import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.graphx.Edge
 import org.graphstream.graph.{Edge, Node}
 import org.graphstream.graph.implementations.SingleGraph
 
@@ -86,6 +90,7 @@ node#Worgs7{
    fill-color:#555;
    shape:diamond;
    }
+
      node#Barbares1{
          size: 25px,15px;
       fill-color:#F00;
@@ -132,7 +137,7 @@ node#Worgs7{
   graph.addAttribute("ui.stylesheet", styleSheet)
   graph.addAttribute("ui.antialias")
   graph.addAttribute("ui.quality")
-
+/*
   val Solar: Node = graph.addNode("Solar")
   val Pito: Node = graph.addNode("Pito")
   val Worgs1: Node = graph.addNode("Worgs1")
@@ -148,13 +153,47 @@ node#Worgs7{
   val Barbares1: Node = graph.addNode("Barbares1")
   val Barbares2: Node = graph.addNode("Barbares2")
   val Barbares3: Node = graph.addNode("Barbares3")
-  val Barbares4: Node = graph.addNode("Barbares4")
+  val Barbares4: Node = graph.addNode("Barbares4")*/
+
+  val conf = new SparkConf()
+    .setAppName("Petersen Graph (10 nodes) test")
+    .setMaster("local[*]")
+  val sc = new SparkContext(conf)
+  sc.setLogLevel("ERROR")
+  var myVertices = sc.makeRDD(Array(
+    Vertice(1L, new node(id = 1L, new Solar())),
+    Vertice(2L, new node(id = 2L, new WorgsRider())),
+    Vertice(3L, new node(id = 3L, new WorgsRider())),
+    Vertice(4L, new node(id = 4L, new WorgsRider())),
+    Vertice(5L, new node(id = 5L, new WorgsRider())),
+    Vertice(6L, new node(id = 6L, new WorgsRider())),
+    Vertice(7L, new node(id = 7L, new WorgsRider())),
+    Vertice(8L, new node(id = 8L, new WorgsRider())),
+    Vertice(9L, new node(id = 9L, new WorgsRider())),
+    Vertice(10L, new node(id = 10L, new Warlord())),
+    Vertice(11L, new node(id = 11L, new BarbareOrc())),
+    Vertice(12L, new node(id = 12L, new BarbareOrc())),
+    Vertice(13L, new node(id = 13L, new BarbareOrc())),
+    Vertice(14L, new node(id = 14L, new BarbareOrc())))) 
 
 
+  var nodes = new Array[Node](myVertices.collect().length)
+  var i : Int = 0
+  for(vertice<-myVertices){
 
+    val x = scala.util.Random
+    val y = scala.util.Random
+    val nodex : Node = graph.addNode(vertice.node.combatant.name + i.toString)
+    nodex.setAttribute("xy", Array[Double](x.nextInt(20), y.nextInt(20)))
+    nodex.setAttribute("ui.label", vertice.node.combatant.name)
 
+    nodes(i) = nodex
+    i+=1
+  }
 
-  Solar.setAttribute("xy", Array[Double](10, 10))
+/*
+  myVertices.getClass()
+  CSolar.setAttribute("xy", Array[Double](10, 10))
   Pito.setAttribute("xy", Array[Double](10, 8))
   Worgs1.setAttribute("xy", Array[Double](10, 15))
   Worgs2.setAttribute("xy", Array[Double](12, 15))
@@ -191,6 +230,6 @@ node#Worgs7{
   Barbares3.setAttribute("ui.label", "Barbares Orc")
   Warlord.setAttribute("ui.label", "Warlord")
 
-
+*/
 
 }

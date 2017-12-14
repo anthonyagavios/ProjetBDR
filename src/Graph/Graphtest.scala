@@ -57,11 +57,11 @@ object MainGraph {
     //println(myVertices.collect().length)
     for (vertice <- myVertices) println(vertice.node.combatant.name)
 
-    var myGraph = Graph(myVertices, myEdges)
+    /*var myGraph = Graph(myVertices, myEdges)
 
     val vertice_and_messages = myGraph.aggregateMessages[VertexId](
       sendAttCreature() //use an optimized join strategy (we don't need the edge attribute)
-    )
+    )*/
   }
 
   def sendAttCreature(ctx: EdgeContext[node, String, String]) : Unit = {
