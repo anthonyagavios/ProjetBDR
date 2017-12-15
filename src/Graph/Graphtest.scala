@@ -98,8 +98,29 @@ object MainGraph {
 
     println(vertice_and_messages)
     println(myGraph.vertices.id+ " azertyuiuytrds")
-    for ((a,b) <- myVertices) println(a+" "+b.combatant.name)
+    //for ((a,b) <- myVertices) println(a+" "+b.combatant.name)
+   println("          "+myVertices.collect().apply(2)._2)
 
+    for (edge <- myEdges) {
+      var src = edge.srcId.intValue()
+      var dst = edge.dstId.intValue()
+      var v = myVertices.collect()
+      var d = dist(v.apply(src)._2.combatant, v.apply(3)._2.combatant)
+    }
+
+  }
+
+
+
+  def updateEdge(g :Graph[node, String]): Unit ={
+    var myEdges = g.edges
+    var myVertices = g.vertices
+    for (edge <- myEdges) {
+      var src = edge.srcId.intValue()
+      var dst = edge.dstId.intValue()
+      var v = myVertices.collect()
+      var d = dist(v.apply(src)._2.combatant, v.apply(3)._2.combatant)
+    }
   }
 
 
