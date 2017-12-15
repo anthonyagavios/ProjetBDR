@@ -2,6 +2,7 @@ package Graph
 
 
 import Combattants._
+import GestionCombat.{PartySolar, PartyWyrm}
 import breeze.numerics._
 import io.netty.buffer.ByteBuf
 import org.apache.spark.{SparkConf, SparkContext}
@@ -81,18 +82,25 @@ object MainGraph {
       ctx.sendToSrc( ctx.dstAttr.combatant.name)
     }
 
-    def changeNode(vid : VertexId, sommet : node, bestId : String) : node = {
+    def changeNode(vid : VertexId, sommet : node, listCreatAtt : String) : node = {
+      val values = listCreatAtt.split(" ")
+      for(v<-values){
+        sommet.combatant.HP = sommet.combatant.attaqueDistance(new PartyWyrm(0, 4, 0, 9, 1),v,0)
+        sommet.combatant.HP = sommet.combatant.attaqueMelee(new PartyWyrm(0, 4, 0, 9, 1),v,0)
+      }
 
       return new node(sommet.id, sommet.combatant)
     }
-
+    while(true){
       val vertice_and_messages = myGraph.aggregateMessages[String](
-       sendAttCreature,
-        (a,ba)=>a+ba //use an optimized join strategy (we don't need the edge attribute)
+        sendAttCreature,
+        (a,ba)=>a+" "+ba //use an optimized join strategy (we don't need the edge attribute)
       )
 
       //Join les resultats des messages avec choisirCouleur
-      myGraph = myGraph.joinVertices(vertice_and_messages)((vid, sommet, bestId) => changeNode(vid, sommet, bestId))
+      myGraph = myGraph.joinVertices(vertice_and_messages)((vid, sommet, listCreatAtt) => changeNode(vid, sommet, listCreatAtt))
+    }
+
 
 
 
@@ -101,25 +109,31 @@ object MainGraph {
     //for ((a,b) <- myVertices) println(a+" "+b.combatant.name)
    println("          "+myVertices.collect().apply(2)._2)
 
-    for (edge <- myEdges) {
-      var src = edge.srcId.intValue()
-      var dst = edge.dstId.intValue()
-      var v = myVertices.collect()
-      var d = dist(v.apply(src)._2.combatant, v.apply(3)._2.combatant)
-    }
 
   }
+/*
+  def distAdjacentCreat(g :Graph[node, String], n : node): List[Int] ={
+    var vertice = g.vertices.collect()
+    var edge = g.edges.collect()
+    val list : List[Int] = Nil;
+    for(e <- edge){
+      if(e.dstId == n.id|| e.srcId == n.id){
+        val list = e.attr::(list::Nil)
+      }
+    }
+    return list;
+  }
 
-
-
-  def updateEdge(g :Graph[node, String]): Unit ={
+*/
+  def updateEdge(g :Graph[node, Int]): Unit ={
     var myEdges = g.edges
     var myVertices = g.vertices
     for (edge <- myEdges) {
       var src = edge.srcId.intValue()
       var dst = edge.dstId.intValue()
       var v = myVertices.collect()
-      var d = dist(v.apply(src)._2.combatant, v.apply(3)._2.combatant)
+      var d = dist(v.apply(src)._2.combatant, v.apply(dst)._2.combatant)
+      edge.attr = d
     }
   }
 
