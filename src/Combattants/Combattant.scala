@@ -1,6 +1,7 @@
 package Combattants
 
 import GestionCombat.PartyWyrm
+import breeze.numerics.{acos, asin, sqrt, tan}
 
 /**
   * Created by adrie on 11/12/2017.
@@ -10,6 +11,8 @@ abstract class Combattant extends Serializable{
   var initiative : Int
   var HP : Int
   var AC : Int
+  var posX : Int
+  var posY : Int
 
   def jetDeDes(): Int = {
     // Jet de des en random avec une limite à 20
@@ -170,4 +173,17 @@ abstract class Combattant extends Serializable{
     HP = HP - dammage;
   }
 
+}
+
+object Combattant{
+  def dist(c1 : Combattant, c2 : Combattant): Int ={
+    return sqrt((c1.posX-c2.posX)*(c1.posX-c2.posX)+(c1.posY-c2.posY)*(c1.posY-c2.posY)).toInt
+  }
+
+  def changePos(c1 : Combattant, c2 : Combattant, dist : Int): Combattant ={
+    var angle = tan((c2.posX-c1.posX)/(c2.posY-c1.posY))
+    c1.posX = c1.posX - (asin(angle)*dist).toInt
+    c1.posY = c1.posY - (acos(angle)*dist).toInt
+    return c1;
+  }
 }

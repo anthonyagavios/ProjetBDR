@@ -7,6 +7,8 @@ class WorgsRider() extends Combattant{
   override var initiative=2
   override var HP = 13;
   override var AC = 18;
+  var posX: Int = 20
+  var posY: Int = 20
 
   override def jetDeDes(): Int = {
     // Jet de des en random avec une limite à 20

@@ -8,6 +8,8 @@ class Solar() extends Combattant{
   var initiative=9
   var HP = 363
   var AC = 44
+  var posX: Int = 0
+  var posY: Int = 0
 
   override def jetDeDes(): Int = {
     // Jet de des en random avec une limite à 20

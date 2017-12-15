@@ -7,6 +7,8 @@ class Warlord() extends Combattant{
   var initiative=2
   var HP = 141;
   var AC = 27;
+  var posX: Int = 20
+  var posY: Int = 20
 
   override def jetDeDes(): Int = {
     // Jet de des en random avec une limite à 20

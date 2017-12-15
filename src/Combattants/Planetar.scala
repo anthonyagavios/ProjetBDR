@@ -7,6 +7,8 @@ class Planetar() extends Combattant{
   var initiative=8
   var HP = 229;
   var AC = 32;
+  var posX: Int = 20
+  var posY: Int = 20
 
   override def jetDeDes(): Int = {
     // Jet de des en random avec une limite à 20
