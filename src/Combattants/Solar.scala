@@ -1,12 +1,12 @@
 package Combattants
 
 import Bestiaire.creature
-import GestionCombat.PartyWyrm
+import GestionCombat.{PartySolar, PartyWyrm}
 
-class Solar() extends Combattant{
+class Solar() extends Combattant {
   var name = "solar"
-  var initiative=9
-  var vitesse=50
+  var initiative = 9
+  var vitesse = 50
   var HP = 363;
   var AC = 44;
 
@@ -160,11 +160,44 @@ class Solar() extends Combattant{
 
   }
 
-  override def attaqueMagic(){}
+   def massHeal(allier: PartySolar): Unit = {
+    for (sol <- allier.solar) {
+      if (sol.HP + 250 <= 363) {
+        sol.HP + 250
+      }
+      else {
+        sol.HP = 363
+      }
+    }
+    for (mova <- allier.movanicDeva) {
+      if (mova.HP + 250 <= 126) {
+        mova.HP + 250
+      }
+      else {
+        mova.HP = 126
+      }
+    }
+    for (ast <- allier.astralDeva) {
+      if (ast.HP + 250 <= 172) {
+        ast.HP + 250
+      }
+      else {
+        ast.HP = 172
+      }
+    }
+    for (pla <- allier.planetar) {
+      if (pla.HP + 250 <= 229) {
+        pla.HP + 250
+      }
+      else {
+        pla.HP = 229
+      }
+    }
+  }
 
-  override def regeneration(): Unit ={
-    if (HP+15>363)HP=363
-    else HP=HP+15;
+  override def regeneration(): Unit = {
+    if (HP + 15 > 363) HP = 363
+    else HP = HP + 15;
   }
 
   override def priseDeDegats(dammage: Int): Unit = {
