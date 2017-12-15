@@ -41,7 +41,7 @@ class RecuperationEtTraitementDonnée {
 
               for (linkTraiter <- tab) {
                 var link = "http://paizo.com" + linkTraiter.split("\"")(1)
-                if (link.contains(("spells"))) {
+                if (link.contains("spells")) {
                   // On ajoute les liens dans le tableau de spells
                   //println(nom(1) + " " + link)
                   spells.append(link)
@@ -58,7 +58,7 @@ class RecuperationEtTraitementDonnée {
       case e: Exception => None
     }
 
-    return spells;
+    return spells
 
 
   }
@@ -80,7 +80,7 @@ class RecuperationEtTraitementDonnée {
       for (a <- 0 to elements.size() - 1) {
 
         // On ajoute le liens de la Bestiaire.creature dans un tableau qui constitura notre bestiaire
-        links.append(urlToCrawl + "/" + elements.get(a).attr("href"));
+        links.append(urlToCrawl + "/" + elements.get(a).attr("href"))
       }
     }
     catch {
