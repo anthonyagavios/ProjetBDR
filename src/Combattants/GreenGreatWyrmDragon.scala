@@ -79,8 +79,15 @@ class GreenGreatWyrmDragon() extends Combattant{
    
     if (nomEnnemi == "solar") {
       for (att <- 0 to 0) {
-        if (jetDeDes() + (33 - 5 * att) > ennemi.solar(numero).AC) {
-          var degats = scala.util.Random.nextInt(53)
+        if (jetDeDes() + (31 - 5 * att) > ennemi.solar(numero).AC) {
+          var degats = scala.util.Random.nextInt(144)
+          ennemi.solar(numero).priseDeDegats(degats)
+          if (ennemi.solar(numero).HP <= 0) {
+            ennemi.solar.remove(numero)
+            return 0
+          }
+        }else{
+          var degats = scala.util.Random.nextInt(144/2)
           ennemi.solar(numero).priseDeDegats(degats)
           if (ennemi.solar(numero).HP <= 0) {
             ennemi.solar.remove(numero)
@@ -92,11 +99,18 @@ class GreenGreatWyrmDragon() extends Combattant{
     }
     else if (nomEnnemi == "astralDeva") {
       for (att <- 0 to 0) {
-        if (jetDeDes() + (33 - 5 * att) > ennemi.astralDeva(numero).AC) {
-          var degats = scala.util.Random.nextInt(53)
+        if (jetDeDes() + (31 - 5 * att) > ennemi.astralDeva(numero).AC) {
+          var degats = scala.util.Random.nextInt(144)
           ennemi.astralDeva(numero).priseDeDegats(degats)
           if (ennemi.astralDeva(numero).HP <= 0) {
             ennemi.astralDeva.remove(numero)
+            return 0
+          }
+        }else{
+          var degats = scala.util.Random.nextInt(144/2)
+          ennemi.solar(numero).priseDeDegats(degats)
+          if (ennemi.solar(numero).HP <= 0) {
+            ennemi.solar.remove(numero)
             return 0
           }
         }
@@ -105,11 +119,18 @@ class GreenGreatWyrmDragon() extends Combattant{
     }
     else if (nomEnnemi == "planetar") {
       for (att <- 0 to 0) {
-        if (jetDeDes() + (33 - 5 * att) > ennemi.planetar(numero).AC) {
-          var degats = scala.util.Random.nextInt(53)
+        if (jetDeDes() + (31 - 5 * att) > ennemi.planetar(numero).AC) {
+          var degats = scala.util.Random.nextInt(144)
           ennemi.planetar(numero).priseDeDegats(degats)
           if (ennemi.planetar(numero).HP <= 0) {
             ennemi.planetar.remove(numero)
+            return 0
+          }
+        }else{
+          var degats = scala.util.Random.nextInt(144/2)
+          ennemi.solar(numero).priseDeDegats(degats)
+          if (ennemi.solar(numero).HP <= 0) {
+            ennemi.solar.remove(numero)
             return 0
           }
         }
@@ -118,11 +139,18 @@ class GreenGreatWyrmDragon() extends Combattant{
     }
     else if (nomEnnemi == "movanicDeva") {
       for (att <- 0 to 0) {
-        if (jetDeDes() + (33 - 5 * att) > ennemi.movanicDeva(numero).AC) {
-          var degats = scala.util.Random.nextInt(53)
+        if (jetDeDes() + (31 - 5 * att) > ennemi.movanicDeva(numero).AC) {
+          var degats = scala.util.Random.nextInt(144)
           ennemi.movanicDeva(numero).priseDeDegats(degats)
           if (ennemi.movanicDeva(numero).HP <= 0) {
             ennemi.movanicDeva.remove(numero)
+            return 0
+          }
+        }else{
+          var degats = scala.util.Random.nextInt(144/2)
+          ennemi.solar(numero).priseDeDegats(degats)
+          if (ennemi.solar(numero).HP <= 0) {
+            ennemi.solar.remove(numero)
             return 0
           }
         }
