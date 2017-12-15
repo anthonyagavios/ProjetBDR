@@ -38,7 +38,7 @@ object MainGraph extends App {
  			}
 
 
-  node#Solar {
+  node#solar {
     size:50px;
     fill-color:#fed301;
   }
@@ -161,21 +161,6 @@ node#Worgs7{
     .setMaster("local[*]")
   val sc = new SparkContext(conf)
   sc.setLogLevel("ERROR")
- /* var myVertices = sc.makeRDD(Array(
-    Vertice(1L, new node(id = 1L, new Solar())),
-    Vertice(2L, new node(id = 2L, new WorgsRider())),
-    Vertice(3L, new node(id = 3L, new WorgsRider())),
-    Vertice(4L, new node(id = 4L, new WorgsRider())),
-    Vertice(5L, new node(id = 5L, new WorgsRider())),
-    Vertice(6L, new node(id = 6L, new WorgsRider())),
-    Vertice(7L, new node(id = 7L, new WorgsRider())),
-    Vertice(8L, new node(id = 8L, new WorgsRider())),
-    Vertice(9L, new node(id = 9L, new WorgsRider())),
-    Vertice(10L, new node(id = 10L, new Warlord())),
-    Vertice(11L, new node(id = 11L, new BarbareOrc())),
-    Vertice(12L, new node(id = 12L, new BarbareOrc())),
-    Vertice(13L, new node(id = 13L, new BarbareOrc())),
-    Vertice(14L, new node(id = 14L, new BarbareOrc())))) */
 
   val partysolar : PartySolar = new PartySolar(1,0,0,0)
   val partywyrm : PartyWyrm = new PartyWyrm(0,4,0,9,1)
