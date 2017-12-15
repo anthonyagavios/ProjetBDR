@@ -68,7 +68,7 @@ class Terrain {
 
   val rand=scala.util.Random
 
-  def constructionTerrain(gentil: PartySolar, mechant: PartyWyrm, distanceWorgs: Int, distanceOrc: Int, distanceWarlord: Int, distanceWyrm: Int, distanceAngelSlayer: Int) {
+  def constructionTerrain(gentil: PartySolar, mechant: PartyWyrm, distanceWorgs: Int, distanceOrc: Int, distanceWarlord: Int, distanceWyrm: Int, distanceAngelSlayer: Int, numeroCombat: Int) {
 
     // Creation des noeuds contenant les solars
     if (!gentil.solar.isEmpty) {
@@ -264,14 +264,15 @@ class Terrain {
 
     // Ajout des coordonnées pour les barbares
     if(numeroCombat==0){ x = 0}
-    else(x=70)
+    else(x=75)
 
     var t=0
     for (mons <- orcs) {
       mons.setAttribute("xy", Array[Double](x, distanceOrc+y))
-
-      x += rand.nextInt(2)-1
-      y += rand.nextInt(2)-1
+      if(numeroCombat==2) {
+        x += rand.nextInt(2) - 1
+        y += rand.nextInt(2) - 1
+      }
     }
 
     // Ajout des coordonnées pour les warlords
@@ -391,22 +392,29 @@ class Terrain {
     }
 
     // Ajout des coordonnées pour les barbares
-   if(numeroCombat==2) {x = 0}
-    else{x=70}
-    for (mons <- orcs) {
+   if(numeroCombat==2)
+    {
+      x = 75
+      for (mons <- orcs) {
 
-      var rndx = rand.nextInt(10)-5
-      var rndy = rand.nextInt(10)-5
+        var rndx = rand.nextInt(10) - 5
+        var rndy = rand.nextInt(10) - 5
 
-      while((rndx*rndx+rndy*rndy)>25)
-        {
-           rndx = rand.nextInt(10)-5
-           rndy = rand.nextInt(10)-5
+        while ((rndx * rndx + rndy * rndy) > 25) {
+          rndx = rand.nextInt(10) - 5
+          rndy = rand.nextInt(10) - 5
         }
-      mons.setAttribute("xy", Array[Double](x+rndx, distanceOrc+rndy-2))
+        mons.setAttribute("xy", Array[Double](x+rndx, distanceOrc+rndy-2))
 
-
+      }
     }
+   else {
+     x = 70
+     for (mons <- orcs) {
+     mons.setAttribute("xy", Array[Double](x , distanceOrc ))}
+   }
+
+
 
     // Ajout des coordonnées pour les warlords
     x = 75
