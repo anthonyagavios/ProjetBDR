@@ -66,7 +66,7 @@ class Terrain {
   var warlords = new ArrayBuffer[Node]
   var wyrms = new ArrayBuffer[Node]
 
-  def constructionTerrain(gentil: PartySolar, mechant: PartyWyrm, distanceWorgs: Int, distanceOrc: Int, distanceWarlord: Int, distanceWyrm: Int, distanceAngelSlayer: Int) {
+  def constructionTerrain(gentil: PartySolar, mechant: PartyWyrm, distanceWorgs: Int, distanceOrc: Int, distanceWarlord: Int, distanceWyrm: Int, distanceAngelSlayer: Int,numeroCombat:Int) {
 
     // Creation des noeuds contenant les solars
     if (!gentil.solar.isEmpty) {
@@ -92,7 +92,7 @@ class Terrain {
           """
           node#Planetar""" + numero +
           """{
-          size:50px;
+          size:20px;
           fill-color:#fed301;
           }
         """
@@ -108,7 +108,7 @@ class Terrain {
           """
           node#MovanicDeva""" + numero +
           """{
-          size:50px;
+          size:15px;
           fill-color:#fed301;
           }
         """
@@ -124,7 +124,7 @@ class Terrain {
           """
           node#AstralDeva""" + numero +
           """{
-          size:50px;
+          size:15px;
           fill-color:#fed301;
           }
         """
@@ -210,9 +210,9 @@ class Terrain {
           """
           node#GreatGreenWyrmDragon""" + numero +
           """{
-            size: 25px,15px;
-              fill-color:#F00;
-              shape:diamond;
+            size: 50px,50px;
+              fill-color:#00FF00;
+              shape:box;
           }
         """
         wyrms.append(wyrm)
@@ -221,14 +221,14 @@ class Terrain {
 
 
     // Ajout des coordonnées pour les solars
-    var x = 10
+    var x = 75
     var y = 0
     for (mons <- solars) {
       mons.setAttribute("xy", Array[Double](x, y))
       x += 1
     }
 
-    x=8
+    x=70
     y=10
     // Ajout des coordonnées pour les planetars
     for (mons <- planetars) {
@@ -236,7 +236,7 @@ class Terrain {
       x += 1
     }
 
-    x=8
+    x=70
     y=15
     // Ajout des coordonnées pour les movanicDeva
     for (mons <- movanicDevas) {
@@ -244,7 +244,7 @@ class Terrain {
       x += 1
     }
 
-    x=8
+    x=70
     y=20
     // Ajout des coordonnées pour les astralDeva
     for (mons <- astralDevas) {
@@ -253,35 +253,38 @@ class Terrain {
     }
 
     // Ajout des coordonnées pour les worgs
-    x = 6
+    x = 70
     for (mons <- worgs) {
       mons.setAttribute("xy", Array[Double](x, distanceWorgs))
       x += 1
     }
 
     // Ajout des coordonnées pour les barbares
-    x = 8
+    if(numeroCombat==0){ x = 0}
+    else(x=70)
+
+    var t=0
     for (mons <- orcs) {
       mons.setAttribute("xy", Array[Double](x, distanceOrc))
       x += 1
     }
 
     // Ajout des coordonnées pour les warlords
-    x = 10
+    x = 75
     for (mons <- warlords) {
       mons.setAttribute("xy", Array[Double](x, distanceWarlord))
       x += 1
     }
 
     // Ajout des coordonnées pour les angelslayers
-    x = 8
+    x = 70
     for (mons <- angelSlayers) {
       mons.setAttribute("xy", Array[Double](x, distanceAngelSlayer))
       x += 1
     }
 
     // Ajout des coordonnées pour les wyrms
-    x = 8
+    x = 75
     for (mons <- wyrms) {
       mons.setAttribute("xy", Array[Double](x, distanceWyrm))
       x += 1
@@ -336,22 +339,22 @@ class Terrain {
 
 
     // Applique la mise en forme et permet l'affichage
-    graph.display
+    graph.display(false)
     graph.addAttribute("ui.stylesheet", styleSheet)
     graph.addAttribute("ui.antialias")
     graph.addAttribute("ui.quality")
   }
-  def updateDistance(distanceWorgs: Int, distanceOrc: Int, distanceWarlord: Int, distanceWyrm: Int, distanceAngelSlayer: Int): Unit ={
+  def updateDistance(distanceWorgs: Int, distanceOrc: Int, distanceWarlord: Int, distanceWyrm: Int, distanceAngelSlayer: Int,numeroCombat:Int): Unit ={
 
     // Ajout des coordonnées pour les solars
-    var x = 10
+    var x = 75
     var y = 0
     for (mons <- solars) {
       mons.setAttribute("xy", Array[Double](x, y))
       x += 1
     }
 
-    x=8
+    x=70
     y=10
     // Ajout des coordonnées pour les planetars
     for (mons <- planetars) {
@@ -359,7 +362,7 @@ class Terrain {
       x += 1
     }
 
-    x=8
+    x=70
     y=15
     // Ajout des coordonnées pour les movanicDeva
     for (mons <- movanicDevas) {
@@ -367,7 +370,7 @@ class Terrain {
       x += 1
     }
 
-    x=8
+    x=70
     y=20
     // Ajout des coordonnées pour les astralDeva
     for (mons <- astralDevas) {
@@ -376,35 +379,36 @@ class Terrain {
     }
 
     // Ajout des coordonnées pour les worgs
-    x = 6
+    x = 70
     for (mons <- worgs) {
       mons.setAttribute("xy", Array[Double](x, distanceWorgs))
       x += 1
     }
 
     // Ajout des coordonnées pour les barbares
-    x = 8
+   if(numeroCombat==2) {x = 0}
+    else{x=70}
     for (mons <- orcs) {
       mons.setAttribute("xy", Array[Double](x, distanceOrc))
       x += 1
     }
 
     // Ajout des coordonnées pour les warlords
-    x = 10
+    x = 75
     for (mons <- warlords) {
       mons.setAttribute("xy", Array[Double](x, distanceWarlord))
       x += 1
     }
 
     // Ajout des coordonnées pour les angelslayers
-    x = 8
+    x = 70
     for (mons <- angelSlayers) {
       mons.setAttribute("xy", Array[Double](x, distanceAngelSlayer))
       x += 1
     }
 
     // Ajout des coordonnées pour les wyrms
-    x = 8
+    x = 75
     for (mons <- wyrms) {
       mons.setAttribute("xy", Array[Double](x, distanceWyrm))
       x += 1

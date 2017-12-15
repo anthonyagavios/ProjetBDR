@@ -29,7 +29,7 @@ class Combat {
     var numeroWarlord = 0
 
     var terrain = new Terrain
-    terrain.constructionTerrain(gentil, mechant, distanceWorgs, distanceOrc, distanceWarlord, 0, 0)
+    terrain.constructionTerrain(gentil, mechant, distanceWorgs, distanceOrc, distanceWarlord, 0, 0, 1)
 
     while (!fin) {
 
@@ -176,7 +176,7 @@ class Combat {
       gentil.solar(0).regeneration()
 
 
-      terrain.updateDistance(distanceWorgs, distanceOrc, distanceWarlord, 0, 0)
+      terrain.updateDistance(distanceWorgs, distanceOrc, distanceWarlord, 0, 0, 1)
       Thread.sleep(1000)
       println("Il reste " + mechant.barbareOrc.size + " barbareOrc")
       println("Il reste " + mechant.worgsRider.size + " worgsRider")
@@ -215,7 +215,7 @@ class Combat {
     var numeroAstralDeva = 0
 
     var terrain = new Terrain
-    terrain.constructionTerrain(gentil, mechant, 0, distanceOrc, 0, distanceWyrm, distanceAngel)
+    terrain.constructionTerrain(gentil, mechant, 0, distanceOrc, 0, distanceWyrm, distanceAngel, 2)
 
     while (!fin) {
 
@@ -237,7 +237,7 @@ class Combat {
       var envol = false
 
       var action = false
-      var massHeal=true
+      var massHeal = true
 
 
       // Choix de cible pour les gentils
@@ -300,10 +300,10 @@ class Combat {
       }
 
       // Reagarde les HP de l'équipe et lance massHeal au besoin (1 seule utilisation)
-      if (massHeal && ((!gentil.planetar.isEmpty && gentil.planetar(0).HP <= gentil.planetar(0).HP / 2) || (!gentil.movanicDeva.isEmpty && gentil.movanicDeva(0).HP <= gentil.movanicDeva(0).HP / 2) ||( !gentil.astralDeva.isEmpty && gentil.astralDeva(0).HP <= gentil.astralDeva(0).HP / 2 )|| (!gentil.solar.isEmpty && gentil.solar(0).HP <= gentil.solar(0).HP / 2))) {
+      if (massHeal && ((!gentil.planetar.isEmpty && gentil.planetar(0).HP <= gentil.planetar(0).HP / 2) || (!gentil.movanicDeva.isEmpty && gentil.movanicDeva(0).HP <= gentil.movanicDeva(0).HP / 2) || (!gentil.astralDeva.isEmpty && gentil.astralDeva(0).HP <= gentil.astralDeva(0).HP / 2) || (!gentil.solar.isEmpty && gentil.solar(0).HP <= gentil.solar(0).HP / 2))) {
         gentil.solar(0).massHeal(gentil)
         action = false
-        massHeal=false
+        massHeal = false
       }
 
 
@@ -580,9 +580,11 @@ class Combat {
       // Mise a jour du nombre de noeuds
       if (sizeOrc - mechant.barbareOrc.size != 0) {
         for (i <- 0 to (sizeOrc - mechant.barbareOrc.size - 1)) {
-          terrain.graph.removeNode("BarbaresOrc" + numeroOrc)
+
+          terrain.graph.removeNode("BarbaresOrc" + (199 - numeroOrc))
           sizeOrc = mechant.barbareOrc.size
           numeroOrc += 1
+
         }
       }
 
@@ -638,8 +640,8 @@ class Combat {
       gentil.solar(0).regeneration()
 
       // Update de la position des combattant sur l'affichage
-      terrain.updateDistance(0, distanceOrc, 0, distanceWyrm, distanceAngel)
-      Thread.sleep(1000)
+      terrain.updateDistance(0, distanceOrc, 0, distanceWyrm, distanceAngel ,2)
+      Thread.sleep(100)
 
       // Suivi console
       println("Il reste " + mechant.barbareOrc.size + " barbareOrc")
