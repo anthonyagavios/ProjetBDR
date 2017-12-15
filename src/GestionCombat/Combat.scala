@@ -299,7 +299,7 @@ class Combat {
         cibleBarbareOrc = gentil.solar(0).name
       }
 
-      // Reagarde les HP de l'équipe
+      // Reagarde les HP de l'équipe et lance massHeal au besoin (1 seule utilisation)
       if (massHeal && ((!gentil.planetar.isEmpty && gentil.planetar(0).HP <= gentil.planetar(0).HP / 2) || (!gentil.movanicDeva.isEmpty && gentil.movanicDeva(0).HP <= gentil.movanicDeva(0).HP / 2) ||( !gentil.astralDeva.isEmpty && gentil.astralDeva(0).HP <= gentil.astralDeva(0).HP / 2 )|| (!gentil.solar.isEmpty && gentil.solar(0).HP <= gentil.solar(0).HP / 2))) {
         gentil.solar(0).massHeal(gentil)
         action = false
@@ -514,7 +514,7 @@ class Combat {
           }
         }
       }
-      // Attaque magic
+      // Attaque magic (pour le dragon)
       if (tour != 0 && gentil.solar.isEmpty) {
         for (wyrm <- mechant.greenGreatWyrmDragon) {
           var jetDes = scala.util.Random
@@ -634,12 +634,14 @@ class Combat {
         }
       }
 
+      // Regeneration du solar
       gentil.solar(0).regeneration()
 
-
+      // Update de la position des combattant sur l'affichage
       terrain.updateDistance(0, distanceOrc, 0, distanceWyrm, distanceAngel)
-      //Thread.sleep(1000)
+      Thread.sleep(1000)
 
+      // Suivi console
       println("Il reste " + mechant.barbareOrc.size + " barbareOrc")
       println("Il reste " + mechant.greenGreatWyrmDragon.size + " greatGreenWyrmDragon")
       println("Il reste " + mechant.angelSlayer.size + " angelSlayer")
@@ -649,6 +651,7 @@ class Combat {
       println("Il reste " + gentil.movanicDeva.size + " movanicDeva")
       println("Il reste " + gentil.astralDeva.size + " astralDeva")
 
+      // Suivi des tours
       tour += 1
     }
   }
