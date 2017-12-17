@@ -94,8 +94,8 @@ object Main {
 
     // Combat
     var combat =new Combat
-    //combat.premierCombat()
-         combat.deuxiemeCombat()
+    combat.premierCombat()
+         //combat.deuxiemeCombat()
 
 
   }

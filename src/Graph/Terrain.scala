@@ -66,7 +66,7 @@ class Terrain {
   var warlords = new ArrayBuffer[Node]
   var wyrms = new ArrayBuffer[Node]
 
-  val rand=scala.util.Random
+  val rand = scala.util.Random
 
   def constructionTerrain(gentil: PartySolar, mechant: PartyWyrm, distanceWorgs: Int, distanceOrc: Int, distanceWarlord: Int, distanceWyrm: Int, distanceAngelSlayer: Int, numeroCombat: Int) {
 
@@ -195,9 +195,9 @@ class Terrain {
           """
           node#AngelSlayer""" + numero +
           """{
-            size: 25px,15px;
-              fill-color:#F00;
-              shape:diamond;
+            size: 25px;
+              fill-color:#0000FF;
+              shape:cross;
           }
         """
         angelSlayers.append(angel)
@@ -222,7 +222,6 @@ class Terrain {
     }
 
 
-
     // Ajout des coordonnées pour les solars
     var x = 75
     var y = 0
@@ -231,24 +230,24 @@ class Terrain {
       x += 1
     }
 
-    x=70
-    y=10
+    x = 70
+    y = 10
     // Ajout des coordonnées pour les planetars
     for (mons <- planetars) {
       mons.setAttribute("xy", Array[Double](x, y))
       x += 1
     }
 
-    x=70
-    y=15
+    x = 70
+    y = 15
     // Ajout des coordonnées pour les movanicDeva
     for (mons <- movanicDevas) {
       mons.setAttribute("xy", Array[Double](x, y))
       x += 1
     }
 
-    x=70
-    y=20
+    x = 70
+    y = 20
     // Ajout des coordonnées pour les astralDeva
     for (mons <- astralDevas) {
       mons.setAttribute("xy", Array[Double](x, y))
@@ -262,17 +261,36 @@ class Terrain {
       x += 1
     }
 
+    var rndx=0
+    var rndy=0
     // Ajout des coordonnées pour les barbares
-    if(numeroCombat==0){ x = 0}
-    else(x=75)
 
-    var t=0
+
     for (mons <- orcs) {
-      mons.setAttribute("xy", Array[Double](x, distanceOrc+y))
-      if(numeroCombat==2) {
-        x += rand.nextInt(2) - 1
-        y += rand.nextInt(2) - 1
+
+      if (numeroCombat == 1) {
+        x = 75
+          rndx = rand.nextInt(2)
+          rndy = rand.nextInt(2)
+
       }
+      else
+      {
+        x = 75
+         rndx = rand.nextInt(10) - 5
+         rndy = rand.nextInt(10) - 5
+
+        while ((rndx * rndx + rndy * rndy) > 25) {
+          rndx = rand.nextInt(10) - 5
+          rndy = rand.nextInt(10) - 5
+        }
+      }
+
+
+      mons.setAttribute("xy", Array[Double](x+rndx, distanceOrc + rndy-2))
+
+
+
     }
 
     // Ajout des coordonnées pour les warlords
@@ -350,7 +368,8 @@ class Terrain {
     graph.addAttribute("ui.antialias")
     graph.addAttribute("ui.quality")
   }
-  def updateDistance(distanceWorgs: Int, distanceOrc: Int, distanceWarlord: Int, distanceWyrm: Int, distanceAngelSlayer: Int,numeroCombat:Int): Unit ={
+
+  def updateDistance(distanceWorgs: Int, distanceOrc: Int, distanceWarlord: Int, distanceWyrm: Int, distanceAngelSlayer: Int, numeroCombat: Int): Unit = {
 
     // Ajout des coordonnées pour les solars
     var x = 75
@@ -360,24 +379,24 @@ class Terrain {
       x += 1
     }
 
-    x=70
-    y=10
+    x = 70
+    y = 10
     // Ajout des coordonnées pour les planetars
     for (mons <- planetars) {
       mons.setAttribute("xy", Array[Double](x, y))
       x += 1
     }
 
-    x=70
-    y=15
+    x = 70
+    y = 15
     // Ajout des coordonnées pour les movanicDeva
     for (mons <- movanicDevas) {
       mons.setAttribute("xy", Array[Double](x, y))
       x += 1
     }
 
-    x=70
-    y=20
+    x = 70
+    y = 20
     // Ajout des coordonnées pour les astralDeva
     for (mons <- astralDevas) {
       mons.setAttribute("xy", Array[Double](x, y))
@@ -392,27 +411,15 @@ class Terrain {
     }
 
     // Ajout des coordonnées pour les barbares
-   if(numeroCombat==2)
-    {
-      x = 75
+
       for (mons <- orcs) {
 
-        var rndx = rand.nextInt(10) - 5
-        var rndy = rand.nextInt(10) - 5
-
-        while ((rndx * rndx + rndy * rndy) > 25) {
-          rndx = rand.nextInt(10) - 5
-          rndy = rand.nextInt(10) - 5
-        }
-        mons.setAttribute("xy", Array[Double](x+rndx, distanceOrc+rndy-2))
+        var coord =mons.getAttribute[Array[Double]]("xy")
+        mons.setAttribute("xy", Array[Double](coord(0) , coord(1)-distanceOrc ))
 
       }
-    }
-   else {
-     x = 70
-     for (mons <- orcs) {
-     mons.setAttribute("xy", Array[Double](x , distanceOrc ))}
-   }
+
+
 
 
 

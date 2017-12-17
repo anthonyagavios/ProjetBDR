@@ -14,6 +14,7 @@ class Combat {
     var mechant = new PartyWyrm(0, 4, 0, 9, 1)
 
     var distanceOrc = 120
+    var lastDistanceOrc = 120
     var distanceWorgs = 110
     var distanceWarlord = 130
 
@@ -176,7 +177,8 @@ class Combat {
       gentil.solar(0).regeneration()
 
 
-      terrain.updateDistance(distanceWorgs, distanceOrc, distanceWarlord, 0, 0, 1)
+      terrain.updateDistance(distanceWorgs, lastDistanceOrc-distanceOrc, distanceWarlord, 0, 0, 1)
+      lastDistanceOrc=distanceOrc
       Thread.sleep(1000)
       println("Il reste " + mechant.barbareOrc.size + " barbareOrc")
       println("Il reste " + mechant.worgsRider.size + " worgsRider")
@@ -190,6 +192,7 @@ class Combat {
     var mechant = new PartyWyrm(1, 200, 10, 0, 0)
 
     var distanceOrc = 110
+    var lastDistanceOrc = 110
     var distanceWyrm = 130
     var distanceAngel = 120
 
@@ -640,7 +643,9 @@ class Combat {
       gentil.solar(0).regeneration()
 
       // Update de la position des combattant sur l'affichage
-      terrain.updateDistance(0, distanceOrc, 0, distanceWyrm, distanceAngel ,2)
+      terrain.updateDistance(0, lastDistanceOrc-distanceOrc, 0, distanceWyrm, distanceAngel ,2)
+      lastDistanceOrc = distanceOrc
+
       Thread.sleep(100)
 
       // Suivi console
