@@ -9,6 +9,8 @@ class GreenGreatWyrmDragon() extends Combattant{
   var vitesse=40
   var HP = 391;
   var AC = 37;
+  override var posX = 0
+  override var posY = 0
 
   override def jetDeDes(): Int = {
     // Jet de des en random avec une limite à 20

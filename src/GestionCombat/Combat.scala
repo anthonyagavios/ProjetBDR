@@ -1,6 +1,6 @@
 package GestionCombat
 
-import Graph.Terrain
+import Graph.{GraphCombat, Terrain}
 import org.graphstream.graph.Node
 import org.graphstream.graph.implementations.SingleGraph
 
@@ -10,8 +10,8 @@ import scala.collection.mutable.ArrayBuffer
 class Combat {
   def premierCombat(): Unit = {
 
-    var gentil = new PartySolar(1, 0, 0, 0)
-    var mechant = new PartyWyrm(0, 4, 0, 9, 1)
+    var gentil = new PartySolar(1, 0, 0, 0, new GraphCombat)
+    var mechant = new PartyWyrm(0, 4, 0, 9, 1, new GraphCombat)
 
     var distanceOrc = 120
     var lastDistanceOrc = 120
@@ -188,8 +188,8 @@ class Combat {
   }
 
   def deuxiemeCombat(): Unit = {
-    var gentil = new PartySolar(1, 2, 2, 5)
-    var mechant = new PartyWyrm(1, 200, 10, 0, 0)
+    var gentil = new PartySolar(1, 2, 2, 5, new GraphCombat)
+    var mechant = new PartyWyrm(1, 200, 10, 0, 0, new GraphCombat)
 
     var distanceOrc = 110
     var lastDistanceOrc = 110

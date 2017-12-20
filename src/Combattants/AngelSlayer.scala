@@ -3,13 +3,15 @@ package Combattants
 import GestionCombat.PartySolar
 
 
-class AngelSlayer() extends Combattant{
+class AngelSlayer()extends Combattant{
 
   var name = "angelSlayer"
   var initiative=7
   var vitesse=40
   var HP = 112;
   var AC = 26;
+  override var posX = 0
+  override var posY = 0
 
 
   override def jetDeDes(): Int = {

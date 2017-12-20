@@ -9,6 +9,8 @@ class Solar() extends Combattant {
   var vitesse = 50
   var HP = 363;
   var AC = 44;
+  override var posX = 0
+  override var posY = 0
 
 
   override def jetDeDes(): Int = {

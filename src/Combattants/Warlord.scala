@@ -8,6 +8,8 @@ class Warlord() extends Combattant{
   var vitesse=30
   var HP = 141;
   var AC = 27;
+  override var posX = 0
+  override var posY = 0
 
   override def jetDeDes(): Int = {
     // Jet de des en random avec une limite à 20

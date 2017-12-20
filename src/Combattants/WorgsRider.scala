@@ -10,6 +10,8 @@ class WorgsRider() extends Combattant {
   var vitesse = 20
   var HP = 13;
   var AC = 18;
+  override var posX = 0
+  override var posY = 0
 
 
   override def jetDeDes(): Int = {

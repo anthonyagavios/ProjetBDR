@@ -30,13 +30,13 @@ object Graphs extends Serializable {
 
   /* Utils */
   //Fonction template pour imprimer n'importe quel graphe
-  def printg[VD, ED](g: Graph[VD, ED]): Unit = {
+  def printg[VD, ED](g: GraphCombat[VD, ED]): Unit = {
     g.vertices.collect.foreach(vv => {
       println(s"vertexID : ${vv._1} node: ${vv._2}")
     })
   }
 
-  def getChromaticNumber(g: Graph[node, String]): Int = {
+  def getChromaticNumber(g: GraphCombat[node, String]): Int = {
     val aa = g.vertices.collect()
     var maxColor = 0
     for (i <- aa) {
@@ -49,7 +49,7 @@ object Graphs extends Serializable {
   //  graph G {
   //    0 [label="p1 = 1 p2 = 1 p3 = 1 "];
   //    0 -- 1;
-  def readGraphViz(filename: String, sc: SparkContext): Graph[node, String] = {
+  def readGraphViz(filename: String, sc: SparkContext): GraphCombat[node, String] = {
     import scala.io.Source
     var edgesVector: Vector[Edge[String]] = Vector.empty[Edge[String]]
 
@@ -81,13 +81,13 @@ object Graphs extends Serializable {
         edgesVector = edgesVector :+ e.get
     }
     val erdd = sc.makeRDD(edgesVector)
-    val graph: Graph[node, String] = Graph.fromEdges(erdd, new node()) //set all vertices to the color 1, initially
+    val graph: GraphCombat[node, String] = Graph.fromEdges(erdd, new node()) //set all vertices to the color 1, initially
     //NB_COULEUR_MAX = graph.vertices.count().toInt //Set Max number of colors to extreme upper bound
     return graph
   }
 
   //Lire le graphe
-  def readGraphFromFile(filename: String, sc: SparkContext): Graph[node, String] = {
+  def readGraphFromFile(filename: String, sc: SparkContext): GraphCombat[node, String] = {
     import scala.io.Source
     var edgesVector: Vector[Edge[String]] = Vector.empty[Edge[String]]
 
@@ -145,7 +145,7 @@ object Graphs extends Serializable {
       }
     }
     val erdd = sc.makeRDD(edgesVector)
-    val graph: Graph[node, String] = Graph.fromEdges(erdd, new node()) //set all vertices to the color 1, initially
+    val graph: GraphCombat[node, String] = Graph.fromEdges(erdd, new node()) //set all vertices to the color 1, initially
     //NB_COULEUR_MAX = graph.vertices.count().toInt //Set Max number of colors to extreme upper bound
 
     return graph
@@ -202,7 +202,7 @@ class FC2 extends Serializable {
 
   //This is a helper function to execute aggregateMessages over a number of iterations on a certain graph
   //TODO : Dur a debugger a cause des actions
-  def execute(g: Graph[node, String], maxIterations: Int, sc: SparkContext): Graph[node, String] = {
+  def execute(g: GraphCombat[node, String], maxIterations: Int, sc: SparkContext): GraphCombat[node, String] = {
     var myGraph = g
     var counter = 0
     NB_COULEUR_MAX = g.vertices.count().toInt
@@ -244,7 +244,7 @@ class FC2 extends Serializable {
   **/
 class Compute(sc: SparkContext) extends Serializable {
 
-  def randomize_ids(g: Graph[node, String]): Graph[node, String] = {
+  def randomize_ids(g: GraphCombat[node, String]): GraphCombat[node, String] = {
     val count: Int = g.vertices.count().toInt
     //Preparer un graph random
     //Randomizer les ids
@@ -268,7 +268,7 @@ class Compute(sc: SparkContext) extends Serializable {
   //We can make the graph run X times
   //Algorithms supported : FC1, FC2
   //We also randomize the IDS before
-  def run_graph(g: Graph[node, String], times: Int = 1, maxIterations: Int = 400, algorithm: String = "FC2"): Unit = {
+  def run_graph(g: GraphCombat[node, String], times: Int = 1, maxIterations: Int = 400, algorithm: String = "FC2"): Unit = {
     //Repeat this coloring
 
     for (i <- 1 to times) {
@@ -309,7 +309,7 @@ class Compute(sc: SparkContext) extends Serializable {
   //Max = max iterations
   def run_col_graph(filename: String, maxIterations: Int, algorithm: String = "FC2"): Unit = {
 
-    var myGraph: Graph[node, String] = Graphs.readGraphFromFile(filename, sc)
+    var myGraph: GraphCombat[node, String] = Graphs.readGraphFromFile(filename, sc)
 
     if (algorithm == "FC1") {
       var coloring = new FC1(sc)

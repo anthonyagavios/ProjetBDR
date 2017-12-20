@@ -1,10 +1,11 @@
 import Combattants._
 import GestionCombat.{PartySolar, PartyWyrm}
-import Graph.{Terrain, Vertice, node}
+import Graph.{Terrain, Vertice, node, GraphCombat}
 import org.apache.spark.{SparkConf, SparkContext}
-import org.apache.spark.graphx.Edge
+import org.apache.spark.graphx.{Edge, Graph}
 import org.graphstream.graph.{Edge, Node}
 import org.graphstream.graph.implementations.SingleGraph
+
 
 object MainGame extends App {
   System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer")
@@ -46,16 +47,16 @@ object MainGame extends App {
 
 
 """
-  val gentil : PartySolar = new PartySolar(1,0,0,0)
-  val mechant : PartyWyrm = new PartyWyrm(0,4,0,9,1)
+  val gentil : PartySolar = new PartySolar(1,0,0,0, new GraphCombat)
+  val mechant : PartyWyrm = new PartyWyrm(0,4,0,9,1, new GraphCombat)
 
   var distanceOrc = 120
   var distanceWorgs = 110
   var distanceWarlord = 130
 
-  var sizeOrc = mechant.barbareOrc.size
-  var sizeWorgs = mechant.worgsRider.size
-  var sizeWarlord = mechant.warlord.size
+  var sizeOrc = 0//mechant.barbareOrc.size
+  var sizeWorgs = 0//mechant.worgsRider.size
+  var sizeWarlord = 0//mechant.warlord.size
 
   var fin = false
   var tour = 0
@@ -64,10 +65,18 @@ object MainGame extends App {
   var numeroWorg = 0
   var numeroWarlord = 0
 
+
   /*var terrain = new Terrain
-  terrain.constructionTerrain(gentil, mechant, distanceWorgs, distanceOrc, distanceWarlord, 0, 0)*/
+  terrain.constructionTerrain(gentil, mechant, distanceWorgs, distanceOrc, distanceWarlord, 0, 0)
+/*
+  while(true){
+    val vertice_and_messages = graph.agrrMessage()
 
+    //Join les resultats des messages avec choisirCouleur
+    myGraph = myGraph.joinVertices(vertice_and_messages)((vid, sommet, listCreatAtt) => changeNode(vid, sommet, listCreatAtt))
+  }
 
+*/
   // TODO Manque une verification, isEmpty, sur les Arraybuffer
   while (!fin) {
 
@@ -293,5 +302,5 @@ object MainGame extends App {
   }
 
 
-
+*/
 }

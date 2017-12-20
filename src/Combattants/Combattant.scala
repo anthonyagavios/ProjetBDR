@@ -10,6 +10,8 @@ abstract class Combattant extends Serializable{
   var initiative : Int
   var HP : Int
   var AC : Int
+  var posX : Int
+  var posY : Int
 
   def jetDeDes(): Int = {
     // Jet de des en random avec une limite à 20

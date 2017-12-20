@@ -63,14 +63,14 @@ object Graphtest {
       sendAttCreature() //use an optimized join strategy (we don't need the edge attribute)
     )*/
   }
-
+/*
   def sendAttCreature(ctx: EdgeContext[node, String, String]) : Unit = {
 
     //Do we send to a given vertex. SRC or DST.
       ctx.sendToDst( ctx.srcAttr.combatant.name)
       ctx.sendToSrc( ctx.dstAttr.combatant.name)
   }
-
+*/
 }
 /*
 class Graph[RDD[Vertice], ED] {

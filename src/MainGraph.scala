@@ -1,6 +1,6 @@
 import Combattants._
 import GestionCombat.{PartySolar, PartyWyrm}
-import Graph.{Vertice, node}
+import Graph.{GraphCombat, Vertice, node}
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.graphx.Edge
 import org.graphstream.graph.{Edge, Node}
@@ -162,8 +162,8 @@ node#Worgs7{
   val sc = new SparkContext(conf)
   sc.setLogLevel("ERROR")
 
-  val partysolar : PartySolar = new PartySolar(1,0,0,0)
-  val partywyrm : PartyWyrm = new PartyWyrm(0,4,0,9,1)
+  val partysolar : PartySolar = new PartySolar(1,0,0,0, new GraphCombat)
+  val partywyrm : PartyWyrm = new PartyWyrm(0,4,0,9,1, new GraphCombat)
 
   var numbercombattants : Int = partysolar.solar.length+partysolar.astralDeva.length+partysolar.movanicDeva.length + partysolar.planetar.length
   numbercombattants+= partywyrm.angelSlayer.length+partywyrm.barbareOrc.length+partywyrm.greenGreatWyrmDragon.length+partywyrm.warlord.length+partywyrm.worgsRider.length
