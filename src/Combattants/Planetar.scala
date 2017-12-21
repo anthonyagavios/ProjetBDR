@@ -1,6 +1,8 @@
 package Combattants
 
 import GestionCombat.PartyWyrm
+import Graph.node
+import org.apache.spark.graphx.Graph
 
 class Planetar() extends Combattant{
   var name = "planetar"
@@ -18,17 +20,23 @@ class Planetar() extends Combattant{
     return jetDes;
   }
 
-  override def attaqueMelee(ennemi: PartyWyrm, nomEnnemi: String, numero: Int): Int = {
-
+  override def attaqueMelee(ennemi: PartyWyrm, nomEnnemi: String, numero: Int, sommet : node): node = {
+    var newNode = new node()
+    newNode.id = sommet.id
+    newNode.team = sommet.team
+    newNode.combatant = sommet.combatant
+    var hp = sommet.combatant.HP
 
     if (nomEnnemi == "angelSlayer") {
       for (att <- 0 to 2) {
         if (jetDeDes() + (27 - 5 * att) > ennemi.angelSlayer(numero).AC) {
           var degats = scala.util.Random.nextInt(33)
           ennemi.angelSlayer(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.angelSlayer(numero).HP <= 0) {
             ennemi.angelSlayer.remove(numero)
-            return 0
+            return newNode
           }
         }
 
@@ -39,9 +47,11 @@ class Planetar() extends Combattant{
         if (jetDeDes() + (27 - 5 * att) > ennemi.barbareOrc(numero).AC) {
           var degats = scala.util.Random.nextInt(33)
           ennemi.barbareOrc(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.barbareOrc(numero).HP <= 0) {
             ennemi.barbareOrc.remove(numero)
-            return 0
+            return newNode
           }
         }
 
@@ -52,9 +62,11 @@ class Planetar() extends Combattant{
         if (jetDeDes() + (27 - 5 * att) > ennemi.warlord(numero).AC) {
           var degats = scala.util.Random.nextInt(33)
           ennemi.warlord(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.warlord(numero).HP <= 0) {
             ennemi.warlord.remove(numero)
-            return 0
+            return newNode
           }
         }
 
@@ -65,9 +77,11 @@ class Planetar() extends Combattant{
         if (jetDeDes() + (27 - 5 * att) > ennemi.worgsRider(numero).AC) {
           var degats = scala.util.Random.nextInt(33)
           ennemi.worgsRider(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.worgsRider(numero).HP <= 0) {
             ennemi.worgsRider.remove(numero)
-            return 0
+            return newNode
           }
         }
 
@@ -78,15 +92,17 @@ class Planetar() extends Combattant{
         if (jetDeDes() + (27 - 5 * att) > ennemi.greenGreatWyrmDragon(numero).AC) {
           var degats = scala.util.Random.nextInt(33)
           ennemi.greenGreatWyrmDragon(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.greenGreatWyrmDragon(numero).HP <= 0) {
             ennemi.greenGreatWyrmDragon.remove(numero)
-            return 0
+            return newNode
           }
         }
 
       }
     }
-    return 0;
+    return newNode;
   }
 
 

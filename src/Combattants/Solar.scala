@@ -2,6 +2,8 @@ package Combattants
 
 import Bestiaire.creature
 import GestionCombat.{PartySolar, PartyWyrm}
+import Graph.node
+import org.apache.spark.graphx.Graph
 
 class Solar() extends Combattant {
   var name = "solar"
@@ -20,15 +22,22 @@ class Solar() extends Combattant {
     return jetDes;
   }
 
-  override def attaqueMelee(ennemi: PartyWyrm, nomEnnemi: String, numero: Int): Int = {
+  override def attaqueMelee(ennemi: PartyWyrm, nomEnnemi: String, numero: Int, sommet : node): node = {
+    var newNode = new node()
+    newNode.id = sommet.id
+    newNode.team = sommet.team
+    newNode.combatant = sommet.combatant
+    var hp = sommet.combatant.HP
     if (nomEnnemi == "angelSlayer") {
       for (att <- 0 to 3) {
         if (jetDeDes() + (35 - 5 * att) > ennemi.angelSlayer(numero).AC) {
           var degats = scala.util.Random.nextInt(36)
           ennemi.angelSlayer(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.angelSlayer(numero).HP <= 0) {
             ennemi.angelSlayer.remove(numero)
-            return 0
+            return newNode
           }
         }
 
@@ -39,9 +48,11 @@ class Solar() extends Combattant {
         if (jetDeDes() + (35 - 5 * att) > ennemi.barbareOrc(numero).AC) {
           var degats = scala.util.Random.nextInt(36)
           ennemi.barbareOrc(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.barbareOrc(numero).HP <= 0) {
             ennemi.barbareOrc.remove(numero)
-            return 0
+            return newNode
           }
         }
 
@@ -52,9 +63,11 @@ class Solar() extends Combattant {
         if (jetDeDes() + (35 - 5 * att) > ennemi.warlord(numero).AC) {
           var degats = scala.util.Random.nextInt(36)
           ennemi.warlord(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.warlord(numero).HP <= 0) {
             ennemi.warlord.remove(numero)
-            return 0
+            return newNode
           }
         }
 
@@ -65,9 +78,11 @@ class Solar() extends Combattant {
         if (jetDeDes() + (35 - 5 * att) > ennemi.worgsRider(numero).AC) {
           var degats = scala.util.Random.nextInt(36)
           ennemi.worgsRider(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.worgsRider(numero).HP <= 0) {
             ennemi.worgsRider.remove(numero)
-            return 0
+            return newNode
           }
         }
 
@@ -78,9 +93,11 @@ class Solar() extends Combattant {
         if (jetDeDes() + (35 - 5 * att) > ennemi.greenGreatWyrmDragon(numero).AC) {
           var degats = scala.util.Random.nextInt(36)
           ennemi.greenGreatWyrmDragon(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.greenGreatWyrmDragon(numero).HP <= 0) {
             ennemi.greenGreatWyrmDragon.remove(numero)
-            return 0
+            return newNode
           }
         }
 
@@ -88,19 +105,25 @@ class Solar() extends Combattant {
     }
 
 
-    return 0;
+    return sommet
   }
 
-  override def attaqueDistance(ennemi: PartyWyrm, nomEnnemi: String, numero: Int): Int = {
-
+  override def attaqueDistance(ennemi: PartyWyrm, nomEnnemi: String, numero: Int, sommet : node): node = {
+    var newNode = new node()
+    newNode.id = sommet.id
+    newNode.team = sommet.team
+    newNode.combatant = sommet.combatant
+    var hp = sommet.combatant.HP
     if (nomEnnemi == "angelSlayer") {
       for (att <- 0 to 3) {
         if (jetDeDes() + (31 - 5 * att) > ennemi.angelSlayer(numero).AC) {
           var degats = scala.util.Random.nextInt(26)
           ennemi.angelSlayer(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.angelSlayer(numero).HP <= 0) {
             ennemi.angelSlayer.remove(numero)
-            return 0
+            return newNode
           }
         }
 
@@ -110,9 +133,11 @@ class Solar() extends Combattant {
         if (jetDeDes() + (31 - 5 * att) > ennemi.barbareOrc(numero).AC) {
           var degats = scala.util.Random.nextInt(26)
           ennemi.barbareOrc(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.barbareOrc(numero).HP <= 0) {
             ennemi.barbareOrc.remove(numero)
-            return 0
+            return newNode
           }
         }
 
@@ -123,9 +148,11 @@ class Solar() extends Combattant {
         if (jetDeDes() + (31 - 5 * att) > ennemi.warlord(numero).AC) {
           var degats = scala.util.Random.nextInt(26)
           ennemi.warlord(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.warlord(numero).HP <= 0) {
             ennemi.warlord.remove(numero)
-            return 0
+            return newNode
           }
         }
 
@@ -136,9 +163,11 @@ class Solar() extends Combattant {
         if (jetDeDes() + (31 - 5 * att) > ennemi.worgsRider(numero).AC) {
           var degats = scala.util.Random.nextInt(26)
           ennemi.worgsRider(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.worgsRider(numero).HP <= 0) {
             ennemi.worgsRider.remove(numero)
-            return 0
+            return newNode
           }
         }
 
@@ -149,16 +178,18 @@ class Solar() extends Combattant {
         if (jetDeDes() + (31 - 5 * att) > ennemi.greenGreatWyrmDragon(numero).AC) {
           var degats = scala.util.Random.nextInt(26)
           ennemi.greenGreatWyrmDragon(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.greenGreatWyrmDragon(numero).HP <= 0) {
             ennemi.greenGreatWyrmDragon.remove(numero)
-            return 0
+            return newNode
           }
         }
 
       }
     }
 
-    return 0
+    return sommet
 
   }
 
@@ -208,3 +239,4 @@ class Solar() extends Combattant {
 
 
 }
+

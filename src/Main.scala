@@ -16,7 +16,7 @@ import org.apache.spark.rdd.RDD
 import GestionCombat._
 import scala.collection.mutable.ArrayBuffer
 
-object Main {
+object Main extends Serializable {
   def main(args: Array[String]): Unit = {
 /*
         var bestiaire = new ArrayBuffer[Bestiaire.creature]()

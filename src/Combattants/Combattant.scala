@@ -1,6 +1,8 @@
 package Combattants
 
 import GestionCombat.PartyWyrm
+import Graph.node
+import org.apache.spark.graphx.Graph
 
 /**
   * Created by adrie on 11/12/2017.
@@ -20,7 +22,7 @@ abstract class Combattant extends Serializable{
     return jetDes;
   }
 
-  def attaqueMelee( ennemi: PartyWyrm, nomEnnemi: String, numero: Int): Int = {
+  def attaqueMelee( ennemi: PartyWyrm, nomEnnemi: String, numero: Int, sommet : node): node = {
     if (nomEnnemi == "angelSlayer") {
       for (att <- 0 to 3) {
         if (jetDeDes() + (35 - 5 * att) > ennemi.angelSlayer(numero).AC) {
@@ -28,7 +30,7 @@ abstract class Combattant extends Serializable{
           ennemi.angelSlayer(numero).priseDeDegats(degats)
           if (ennemi.angelSlayer(numero).HP <= 0) {
             ennemi.angelSlayer.remove(numero)
-            return 0
+            return sommet
           }
         }
 
@@ -41,7 +43,7 @@ abstract class Combattant extends Serializable{
           ennemi.barbareOrc(numero).priseDeDegats(degats)
           if (ennemi.barbareOrc(numero).HP <= 0) {
             ennemi.barbareOrc.remove(numero)
-            return 0
+            return sommet
           }
         }
 
@@ -54,7 +56,7 @@ abstract class Combattant extends Serializable{
           ennemi.warlord(numero).priseDeDegats(degats)
           if (ennemi.warlord(numero).HP <= 0) {
             ennemi.warlord.remove(numero)
-            return 0
+            return sommet
           }
         }
 
@@ -67,7 +69,7 @@ abstract class Combattant extends Serializable{
           ennemi.worgsRider(numero).priseDeDegats(degats)
           if (ennemi.worgsRider(numero).HP <= 0) {
             ennemi.worgsRider.remove(numero)
-            return 0
+            return sommet
           }
         }
 
@@ -80,7 +82,7 @@ abstract class Combattant extends Serializable{
           ennemi.greenGreatWyrmDragon(numero).priseDeDegats(degats)
           if (ennemi.greenGreatWyrmDragon(numero).HP <= 0) {
             ennemi.greenGreatWyrmDragon.remove(numero)
-            return 0
+            return sommet
           }
         }
 
@@ -88,10 +90,10 @@ abstract class Combattant extends Serializable{
     }
 
 
-    return 0;
+    return sommet;
   }
 
-  def attaqueDistance(ennemi: PartyWyrm, nomEnnemi: String, numero: Int): Int = {
+  def attaqueDistance(ennemi: PartyWyrm, nomEnnemi: String, numero: Int, sommet : node): node = {
 
     if (nomEnnemi == "angelSlayer") {
       for (att <- 0 to 3) {
@@ -100,7 +102,7 @@ abstract class Combattant extends Serializable{
           ennemi.angelSlayer(numero).priseDeDegats(degats)
           if (ennemi.angelSlayer(numero).HP <= 0) {
             ennemi.angelSlayer.remove(numero)
-            return 0
+            return sommet
           }
         }
 
@@ -112,7 +114,7 @@ abstract class Combattant extends Serializable{
           ennemi.barbareOrc(numero).priseDeDegats(degats)
           if (ennemi.barbareOrc(numero).HP <= 0) {
             ennemi.barbareOrc.remove(numero)
-            return 0
+            return sommet
           }
         }
 
@@ -125,7 +127,7 @@ abstract class Combattant extends Serializable{
           ennemi.warlord(numero).priseDeDegats(degats)
           if (ennemi.warlord(numero).HP <= 0) {
             ennemi.warlord.remove(numero)
-            return 0
+            return sommet
           }
         }
 
@@ -138,7 +140,7 @@ abstract class Combattant extends Serializable{
           ennemi.worgsRider(numero).priseDeDegats(degats)
           if (ennemi.worgsRider(numero).HP <= 0) {
             ennemi.worgsRider.remove(numero)
-            return 0
+            return sommet
           }
         }
 
@@ -151,14 +153,14 @@ abstract class Combattant extends Serializable{
           ennemi.greenGreatWyrmDragon(numero).priseDeDegats(degats)
           if (ennemi.greenGreatWyrmDragon(numero).HP <= 0) {
             ennemi.greenGreatWyrmDragon.remove(numero)
-            return 0
+            return sommet
           }
         }
 
       }
     }
 
-    return 0
+    return sommet
 
   }
 

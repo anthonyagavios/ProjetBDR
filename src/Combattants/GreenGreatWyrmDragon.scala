@@ -1,6 +1,8 @@
 package Combattants
 
 import GestionCombat.PartySolar
+import Graph.node
+import org.apache.spark.graphx.Graph
 
 
 class GreenGreatWyrmDragon() extends Combattant{
@@ -19,17 +21,23 @@ class GreenGreatWyrmDragon() extends Combattant{
     return jetDes;
   }
 
-  def attaqueMelee( ennemi: PartySolar, nomEnnemi: String, numero: Int): Int = {
-
+  def attaqueMelee( ennemi: PartySolar, nomEnnemi: String, numero: Int, sommet : node): node = {
+    var newNode = new node()
+    newNode.id = sommet.id
+    newNode.team = sommet.team
+    newNode.combatant = sommet.combatant
+    var hp = sommet.combatant.HP
 
     if (nomEnnemi == "solar") {
       for (att <- 0 to 0) {
         if (jetDeDes() + (33 - 5 * att) > ennemi.solar(numero).AC) {
           var degats = scala.util.Random.nextInt(53)
           ennemi.solar(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.solar(numero).HP <= 0) {
             ennemi.solar.remove(numero)
-            return 0
+            return newNode
           }
         }
 
@@ -40,9 +48,11 @@ class GreenGreatWyrmDragon() extends Combattant{
         if (jetDeDes() + (33 - 5 * att) > ennemi.astralDeva(numero).AC) {
           var degats = scala.util.Random.nextInt(53)
           ennemi.astralDeva(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.astralDeva(numero).HP <= 0) {
             ennemi.astralDeva.remove(numero)
-            return 0
+            return newNode
           }
         }
 
@@ -53,9 +63,11 @@ class GreenGreatWyrmDragon() extends Combattant{
         if (jetDeDes() + (33 - 5 * att) > ennemi.planetar(numero).AC) {
           var degats = scala.util.Random.nextInt(53)
           ennemi.planetar(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.planetar(numero).HP <= 0) {
             ennemi.planetar.remove(numero)
-            return 0
+            return newNode
           }
         }
 
@@ -66,34 +78,44 @@ class GreenGreatWyrmDragon() extends Combattant{
         if (jetDeDes() + (33 - 5 * att) > ennemi.movanicDeva(numero).AC) {
           var degats = scala.util.Random.nextInt(53)
           ennemi.movanicDeva(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.movanicDeva(numero).HP <= 0) {
             ennemi.movanicDeva.remove(numero)
-            return 0
+            return newNode
           }
         }
 
       }
     }
-    return 0;
+    return newNode
   }
 
-  def attaqueMagic(ennemi: PartySolar, nomEnnemi: String, numero: Int): Int = {
-   
+  def attaqueMagic(ennemi: PartySolar, nomEnnemi: String, numero: Int, sommet : node): node = {
+    var newNode = new node()
+    newNode.id = sommet.id
+    newNode.team = sommet.team
+    newNode.combatant = sommet.combatant
+    var hp = sommet.combatant.HP
     if (nomEnnemi == "solar") {
       for (att <- 0 to 0) {
         if (jetDeDes() > 31) {
           var degats = scala.util.Random.nextInt(144)
           ennemi.solar(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.solar(numero).HP <= 0) {
             ennemi.solar.remove(numero)
-            return 0
+            return newNode
           }
         }else{
           var degats = scala.util.Random.nextInt(144/2)
           ennemi.solar(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.solar(numero).HP <= 0) {
             ennemi.solar.remove(numero)
-            return 0
+            return newNode
           }
         }
 
@@ -104,16 +126,20 @@ class GreenGreatWyrmDragon() extends Combattant{
         if (jetDeDes() > 31) {
           var degats = scala.util.Random.nextInt(144)
           ennemi.astralDeva(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.astralDeva(numero).HP <= 0) {
             ennemi.astralDeva.remove(numero)
-            return 0
+            return newNode
           }
         }else{
           var degats = scala.util.Random.nextInt(144/2)
           ennemi.solar(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.solar(numero).HP <= 0) {
             ennemi.solar.remove(numero)
-            return 0
+            return newNode
           }
         }
 
@@ -124,16 +150,20 @@ class GreenGreatWyrmDragon() extends Combattant{
         if (jetDeDes() > 31) {
           var degats = scala.util.Random.nextInt(144)
           ennemi.planetar(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.planetar(numero).HP <= 0) {
             ennemi.planetar.remove(numero)
-            return 0
+            return newNode
           }
         }else{
           var degats = scala.util.Random.nextInt(144/2)
           ennemi.solar(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.solar(numero).HP <= 0) {
             ennemi.solar.remove(numero)
-            return 0
+            return newNode
           }
         }
 
@@ -144,22 +174,26 @@ class GreenGreatWyrmDragon() extends Combattant{
         if (jetDeDes() > 31) {
           var degats = scala.util.Random.nextInt(144)
           ennemi.movanicDeva(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.movanicDeva(numero).HP <= 0) {
             ennemi.movanicDeva.remove(numero)
-            return 0
+            return newNode
           }
         }else{
           var degats = scala.util.Random.nextInt(144/2)
           ennemi.solar(numero).priseDeDegats(degats)
+          hp = hp - degats
+          newNode.combatant.HP = hp
           if (ennemi.solar(numero).HP <= 0) {
             ennemi.solar.remove(numero)
-            return 0
+            return newNode
           }
         }
 
       }
     }
-    return 0;
+    return newNode
   }
 
   override def priseDeDegats(dammage: Int): Unit = {

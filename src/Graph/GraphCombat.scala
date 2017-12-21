@@ -5,6 +5,8 @@ import java.util
 import GestionCombat.{PartySolar, PartyWyrm}
 import org.apache.spark.graphx.{Edge, EdgeContext, EdgeTriplet, Graph, _}
 import Combattants._
+import org.apache.spark.rdd.RDD
+
 import scala.math._
 import org.apache.spark.{SparkConf, SparkContext}
 
@@ -19,26 +21,18 @@ class GraphCombat extends  Serializable {
   var listEdge = new ArrayBuffer[Edge[Int]]
 
 
+
   var id : Long = 0
-
-  def agrrMessage(graph : Graph[node, String]): Unit ={
-    return graph.aggregateMessages[String](sendAttCreature,  (a,ba)=>a+" "+ba )
-  }
-
-  def sendAttCreature(ctx: EdgeContext[node, String, String]) : Unit = {
-
-    //Do we send to a given vertex. SRC or DST.
-    ctx.sendToDst( ctx.srcAttr.combatant.name)
-    ctx.sendToSrc( ctx.dstAttr.combatant.name)
-  }
 
   def changeNode(vid : VertexId, sommet : node, listCreatAtt : String, ennemiS: PartySolar, ennemi: PartyWyrm) : node = {
     val values = listCreatAtt.split(" ")
+    var nsommet = sommet
     for (v <- values) {
-      sommet.combatant.HP = sommet.combatant.attaqueDistance(ennemi, v, 0)
-      sommet.combatant.HP = sommet.combatant.attaqueMelee(ennemi, v, 0)
+
+      //sommet.combatant.attaqueDistance(ennemi, v, 1)
+      nsommet = sommet.combatant.attaqueMelee(ennemi, v, 0, sommet)
     }
-    return new node(sommet.id, sommet.combatant)
+    return nsommet
   }
 
   def updateEdge(g :Graph[node, Int]): Unit ={
@@ -92,33 +86,39 @@ class GraphCombat extends  Serializable {
     }
   }
 
-  def getGraph() : Graph[node, Int]={
-    val conf = new SparkConf()
-      .setAppName("Petersen Graph (10 nodes) test")
-      .setMaster("local[*]")
-    val sc = new SparkContext(conf)
-    sc.setLogLevel("ERROR")
+  def getGraph(sc : SparkContext) : Graph[node, Int]={
+    creatEdge()
     var vertices  = sc.makeRDD(listCreat)
     var edges = sc.makeRDD(listEdge)
-    return Graph(vertices, edges)
+    var graphCreature = Graph(vertices, edges)
+    return graphCreature
   }
+
+  def joinV(graphCreat : Graph[node, Int], vertice_and_messages : RDD[(VertexId, String)], gentil : PartySolar, mechant : PartyWyrm): Graph[node, Int] ={
+    return graphCreat.joinVertices(vertice_and_messages)((vid, sommet, listCreatAtt) => changeNode(vid, sommet, listCreatAtt,  gentil, mechant))
+  }
+
+  def agrrMessage(graph : Graph[node, Int]): RDD[(VertexId, String)] ={
+    var v = graph.aggregateMessages[String](sendAttCreature,  ((s1,s2)=>s1+" "+s2) )
+    v.collect()
+    return v
+  }
+
+  def sendAttCreature(ctx: EdgeContext[node, Int, String]) : Unit = {
+    //Do we send to a given vertex. SRC or DST.
+    ctx.sendToDst( ctx.srcAttr.combatant.name)
+    ctx.sendToSrc( ctx.dstAttr.combatant.name)
+  }
+
 }
 
-
+/*
 //test class graph
 object testGraph extends App{
   var c  = new GraphCombat
-  c.addNode(new Solar, 1)
-  c.addNode(new Planetar, 2)
-  c.addNode(new Planetar, 2)
-  c.addNode(new Planetar, 2)
-  c.addNode(new Planetar, 2)
-  c.addNode(new Planetar, 2)
-  c.addNode(new Planetar, 2)
-  c.addNode(new Planetar, 2)
-  c.addNode(new Planetar, 2)
-  c.addNode(new Planetar, 3)
 
+  var gentil = new PartySolar(1, 0, 0, 0, c)
+  var mechant = new PartyWyrm(0, 4, 0, 9, 1, c)
 
   println("node")
   var r = new Random()
@@ -143,4 +143,12 @@ object testGraph extends App{
     println(e.srcId+" "+e.dstId+" "+e.attr)
   }
 
-}
+  println(" \n\n\n\n\n\n")
+  var counter = 0
+  while (true && counter < 2) {
+    println("ITERATION NUMERO : " + (counter + 1))
+    counter += 1
+
+  }
+
+}*/

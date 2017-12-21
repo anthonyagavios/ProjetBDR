@@ -1,17 +1,25 @@
 package GestionCombat
 
+
 import Graph.{GraphCombat, Terrain}
-import org.graphstream.graph.Node
-import org.graphstream.graph.implementations.SingleGraph
-
-import scala.collection.mutable.ArrayBuffer
+import org.apache.spark.{SparkConf, SparkContext}
 
 
-class Combat {
+class Combat extends Serializable {
   def premierCombat(): Unit = {
+    val conf = new SparkConf()
+      .setAppName("Petersen Graph (10 nodes) test")
+      .setMaster("local[*]")
+    val sc = new SparkContext(conf)
+    sc.setLogLevel("ERROR")
 
-    var gentil = new PartySolar(1, 0, 0, 0, new GraphCombat)
-    var mechant = new PartyWyrm(0, 4, 0, 9, 1, new GraphCombat)
+    var graphComba = new GraphCombat
+    var gentil = new PartySolar(1, 0, 0, 0, graphComba)
+    var mechant = new PartyWyrm(0, 4, 0, 9, 1, graphComba)
+    println("creation graph")
+    var graphCreat  = graphComba.getGraph(sc)
+    graphComba.updateEdge(graphCreat)
+    println(graphCreat.edges.isEmpty())
 
     var distanceOrc = 120
     var lastDistanceOrc = 120
@@ -29,6 +37,7 @@ class Combat {
     var numeroWorg = 0
     var numeroWarlord = 0
 
+
     var terrain = new Terrain
     terrain.constructionTerrain(gentil, mechant, distanceWorgs, distanceOrc, distanceWarlord, 0, 0, 1)
 
@@ -36,7 +45,16 @@ class Combat {
 
       println("tour :" + tour)
 
-      // Attaque a distance tant que les orc ne sont pas au corp a corp pour le solar
+      //after this, each vertice contains its messages
+
+      var vertice_and_messages = graphComba.agrrMessage(graphCreat)
+      //Condition de terminaison https://spark.apache.org/docs/2.1.1/api/scala/index.html#org.apache.spark.api.java.JavaRDD
+
+      graphCreat = graphComba.joinV(graphCreat, vertice_and_messages, gentil, mechant)
+
+      println("hp "+ graphCreat.vertices.collect().apply(1)._2.combatant.name+" "+graphCreat.vertices.collect().apply(1)._2.combatant.HP)
+
+    // Attaque a distance tant que les orc ne sont pas au corp a corp pour le solar
       // Les orc ne font que des attaques corp a corp donc il avance tant qu'ils ne peuvent pas attaquer
       // Attaque toujours la meme cible tant que celle ci est vivante
       // Attaque l'ennemie le plus proche
@@ -57,19 +75,19 @@ class Combat {
       if ((distanceOrc > 7 && distanceOrc < 110) || (distanceWorgs > 7 && distanceWorgs < 110) || (distanceWarlord > 7 && distanceWarlord < 110)) {
         if (cibleSolar == mechant.barbareOrc(0).name) {
           cibleSolar = mechant.barbareOrc(0).name
-          gentil.solar(0).attaqueDistance(mechant, mechant.barbareOrc(0).name, 0)
+          //gentil.solar(0).attaqueDistance(mechant, mechant.barbareOrc(0).name, 0)
 
         }
 
         else if (cibleSolar == mechant.worgsRider(0).name) {
           cibleSolar = mechant.worgsRider(0).name
-          gentil.solar(0).attaqueDistance(mechant, mechant.worgsRider(0).name, 0)
+          //gentil.solar(0).attaqueDistance(mechant, mechant.worgsRider(0).name, 0)
 
         }
 
         else if (cibleSolar == mechant.warlord(0).name) {
           cibleSolar = mechant.warlord(0).name
-          gentil.solar(0).attaqueDistance(mechant, mechant.warlord(0).name, 0)
+          //gentil.solar(0).attaqueDistance(mechant, mechant.warlord(0).name, 0)
 
 
         }
@@ -79,30 +97,30 @@ class Combat {
         if (!mechant.barbareOrc.isEmpty && cibleSolar == mechant.barbareOrc(0).name) {
 
           cibleSolar = mechant.barbareOrc(0).name
-          gentil.solar(0).attaqueMelee(mechant, mechant.barbareOrc(0).name, 0)
+          //gentil.solar(0).attaqueMelee(mechant, mechant.barbareOrc(0).name, 0)
 
 
         } else if (!mechant.warlord.isEmpty && cibleSolar == mechant.warlord(0).name) {
 
           cibleSolar = mechant.warlord(0).name
-          gentil.solar(0).attaqueMelee(mechant, mechant.warlord(0).name, 0)
+          //gentil.solar(0).attaqueMelee(mechant, mechant.warlord(0).name, 0)
 
 
         } else if (!mechant.worgsRider.isEmpty && cibleSolar == mechant.worgsRider(0).name) {
 
           cibleSolar = mechant.worgsRider(0).name
-          gentil.solar(0).attaqueMelee(mechant, mechant.worgsRider(0).name, 0)
+          //gentil.solar(0).attaqueMelee(mechant, mechant.worgsRider(0).name, 0)
 
 
         }
         for (warlord <- mechant.warlord) {
-          warlord.attaqueMelee(gentil, gentil.solar(0).name, 0)
+          //warlord.attaqueMelee(gentil, gentil.solar(0).name, 0)
         }
         for (worgs <- mechant.worgsRider) {
-          worgs.attaqueMelee(gentil, gentil.solar(0).name, 0)
+          //worgs.attaqueMelee(gentil, gentil.solar(0).name, 0)
         }
         for (orc <- mechant.barbareOrc) {
-          orc.attaqueMelee(gentil, gentil.solar(0).name, 0)
+          //orc.attaqueMelee(gentil, gentil.solar(0).name, 0)
         }
 
       }
@@ -183,6 +201,7 @@ class Combat {
       println("Il reste " + mechant.barbareOrc.size + " barbareOrc")
       println("Il reste " + mechant.worgsRider.size + " worgsRider")
       println("Il reste " + mechant.warlord.size + " warlord")
+      println("Il rest  " + gentil.solar(0).HP + " solar")
       tour += 1
     }
   }
@@ -315,59 +334,59 @@ class Combat {
         if (!action) {
           if (cibleSolar == mechant.barbareOrc(0).name) {
             cibleSolar = mechant.barbareOrc(0).name
-            gentil.solar(0).attaqueDistance(mechant, mechant.barbareOrc(0).name, 0)
+            //gentil.solar(0).attaqueDistance(mechant, mechant.barbareOrc(0).name, 0)
           }
           else if (cibleSolar == mechant.angelSlayer(0).name) {
             cibleSolar = mechant.angelSlayer(0).name
-            gentil.solar(0).attaqueDistance(mechant, mechant.angelSlayer(0).name, 0)
+            //gentil.solar(0).attaqueDistance(mechant, mechant.angelSlayer(0).name, 0)
           }
           else if (cibleSolar == mechant.greenGreatWyrmDragon(0).name) {
             cibleSolar = mechant.greenGreatWyrmDragon(0).name
-            gentil.solar(0).attaqueDistance(mechant, mechant.greenGreatWyrmDragon(0).name, 0)
+            //gentil.solar(0).attaqueDistance(mechant, mechant.greenGreatWyrmDragon(0).name, 0)
           }
         }
         for (mova <- gentil.movanicDeva) {
           if (cibleMovanicDeva == mechant.barbareOrc(0).name) {
             cibleMovanicDeva = mechant.barbareOrc(0).name
-            mova.attaqueDistance(mechant, mechant.barbareOrc(0).name, 0)
+            //mova.attaqueDistance(mechant, mechant.barbareOrc(0).name, 0)
           }
           else if (cibleMovanicDeva == mechant.angelSlayer(0).name) {
             cibleMovanicDeva = mechant.angelSlayer(0).name
-            mova.attaqueDistance(mechant, mechant.angelSlayer(0).name, 0)
+            //mova.attaqueDistance(mechant, mechant.angelSlayer(0).name, 0)
           }
           else if (cibleMovanicDeva == mechant.greenGreatWyrmDragon(0).name && envol) {
             cibleMovanicDeva = mechant.greenGreatWyrmDragon(0).name
-            mova.attaqueDistance(mechant, mechant.greenGreatWyrmDragon(0).name, 0)
+            //mova.attaqueDistance(mechant, mechant.greenGreatWyrmDragon(0).name, 0)
           }
         }
 
         for (ast <- gentil.astralDeva) {
           if (cibleAstralDeva == mechant.barbareOrc(0).name) {
             cibleAstralDeva = mechant.barbareOrc(0).name
-            ast.attaqueDistance(mechant, mechant.barbareOrc(0).name, 0)
+            //ast.attaqueDistance(mechant, mechant.barbareOrc(0).name, 0)
           }
           else if (cibleAstralDeva == mechant.angelSlayer(0).name) {
             cibleAstralDeva = mechant.angelSlayer(0).name
-            ast.attaqueDistance(mechant, mechant.angelSlayer(0).name, 0)
+            //ast.attaqueDistance(mechant, mechant.angelSlayer(0).name, 0)
           }
           else if (cibleAstralDeva == mechant.greenGreatWyrmDragon(0).name && envol) {
             cibleAstralDeva = mechant.greenGreatWyrmDragon(0).name
-            ast.attaqueDistance(mechant, mechant.greenGreatWyrmDragon(0).name, 0)
+            //ast.attaqueDistance(mechant, mechant.greenGreatWyrmDragon(0).name, 0)
           }
         }
 
         for (pla <- gentil.planetar) {
           if (ciblePlanetar == mechant.barbareOrc(0).name) {
             ciblePlanetar = mechant.barbareOrc(0).name
-            pla.attaqueDistance(mechant, mechant.barbareOrc(0).name, 0)
+            //pla.attaqueDistance(mechant, mechant.barbareOrc(0).name, 0)
           }
           else if (ciblePlanetar == mechant.angelSlayer(0).name) {
             ciblePlanetar = mechant.angelSlayer(0).name
-            pla.attaqueDistance(mechant, mechant.angelSlayer(0).name, 0)
+            //pla.attaqueDistance(mechant, mechant.angelSlayer(0).name, 0)
           }
           else if (ciblePlanetar == mechant.greenGreatWyrmDragon(0).name && envol) {
             ciblePlanetar = mechant.greenGreatWyrmDragon(0).name
-            pla.attaqueDistance(mechant, mechant.greenGreatWyrmDragon(0).name, 0)
+            //pla.attaqueDistance(mechant, mechant.greenGreatWyrmDragon(0).name, 0)
           }
         }
       }
@@ -377,19 +396,19 @@ class Combat {
           if (!mechant.barbareOrc.isEmpty && cibleSolar == mechant.barbareOrc(0).name) {
 
             cibleSolar = mechant.barbareOrc(0).name
-            gentil.solar(0).attaqueMelee(mechant, mechant.barbareOrc(0).name, 0)
+            //gentil.solar(0).attaqueMelee(mechant, mechant.barbareOrc(0).name, 0)
 
 
           } else if (!mechant.greenGreatWyrmDragon.isEmpty && cibleSolar == mechant.greenGreatWyrmDragon(0).name && !envol) {
 
             cibleSolar = mechant.greenGreatWyrmDragon(0).name
-            gentil.solar(0).attaqueMelee(mechant, mechant.greenGreatWyrmDragon(0).name, 0)
+            //gentil.solar(0).attaqueMelee(mechant, mechant.greenGreatWyrmDragon(0).name, 0)
 
 
           } else if (!mechant.angelSlayer.isEmpty && cibleSolar == mechant.angelSlayer(0).name) {
 
             cibleSolar = mechant.angelSlayer(0).name
-            gentil.solar(0).attaqueMelee(mechant, mechant.angelSlayer(0).name, 0)
+            //gentil.solar(0).attaqueMelee(mechant, mechant.angelSlayer(0).name, 0)
 
 
           }
@@ -398,19 +417,19 @@ class Combat {
           if (!mechant.barbareOrc.isEmpty && ciblePlanetar == mechant.barbareOrc(0).name) {
 
             ciblePlanetar = mechant.barbareOrc(0).name
-            gentil.planetar(0).attaqueMelee(mechant, mechant.barbareOrc(0).name, 0)
+            //gentil.planetar(0).attaqueMelee(mechant, mechant.barbareOrc(0).name, 0)
 
 
           } else if (!mechant.greenGreatWyrmDragon.isEmpty && ciblePlanetar == mechant.greenGreatWyrmDragon(0).name && !envol) {
 
             ciblePlanetar = mechant.greenGreatWyrmDragon(0).name
-            gentil.planetar(0).attaqueMelee(mechant, mechant.greenGreatWyrmDragon(0).name, 0)
+            //gentil.planetar(0).attaqueMelee(mechant, mechant.greenGreatWyrmDragon(0).name, 0)
 
 
           } else if (!mechant.angelSlayer.isEmpty && ciblePlanetar == mechant.angelSlayer(0).name) {
 
             ciblePlanetar = mechant.angelSlayer(0).name
-            gentil.planetar(0).attaqueMelee(mechant, mechant.angelSlayer(0).name, 0)
+            //gentil.planetar(0).attaqueMelee(mechant, mechant.angelSlayer(0).name, 0)
 
 
           }
@@ -419,19 +438,19 @@ class Combat {
           if (!mechant.barbareOrc.isEmpty && cibleMovanicDeva == mechant.barbareOrc(0).name) {
 
             cibleMovanicDeva = mechant.barbareOrc(0).name
-            gentil.movanicDeva(0).attaqueMelee(mechant, mechant.barbareOrc(0).name, 0)
+            //gentil.movanicDeva(0).attaqueMelee(mechant, mechant.barbareOrc(0).name, 0)
 
 
           } else if (!mechant.greenGreatWyrmDragon.isEmpty && cibleMovanicDeva == mechant.greenGreatWyrmDragon(0).name && !envol) {
 
             cibleMovanicDeva = mechant.greenGreatWyrmDragon(0).name
-            gentil.movanicDeva(0).attaqueMelee(mechant, mechant.greenGreatWyrmDragon(0).name, 0)
+            //gentil.movanicDeva(0).attaqueMelee(mechant, mechant.greenGreatWyrmDragon(0).name, 0)
 
 
           } else if (!mechant.angelSlayer.isEmpty && cibleMovanicDeva == mechant.angelSlayer(0).name) {
 
             cibleMovanicDeva = mechant.angelSlayer(0).name
-            gentil.movanicDeva(0).attaqueMelee(mechant, mechant.angelSlayer(0).name, 0)
+            //gentil.movanicDeva(0).attaqueMelee(mechant, mechant.angelSlayer(0).name, 0)
 
 
           }
@@ -441,19 +460,19 @@ class Combat {
           if (!mechant.barbareOrc.isEmpty && cibleAstralDeva == mechant.barbareOrc(0).name) {
 
             cibleAstralDeva = mechant.barbareOrc(0).name
-            gentil.astralDeva(0).attaqueMelee(mechant, mechant.barbareOrc(0).name, 0)
+            //gentil.astralDeva(0).attaqueMelee(mechant, mechant.barbareOrc(0).name, 0)
 
 
           } else if (!mechant.greenGreatWyrmDragon.isEmpty && cibleAstralDeva == mechant.greenGreatWyrmDragon(0).name && !envol) {
 
             cibleAstralDeva = mechant.greenGreatWyrmDragon(0).name
-            gentil.astralDeva(0).attaqueMelee(mechant, mechant.greenGreatWyrmDragon(0).name, 0)
+            //gentil.astralDeva(0).attaqueMelee(mechant, mechant.greenGreatWyrmDragon(0).name, 0)
 
 
           } else if (!mechant.angelSlayer.isEmpty && cibleAstralDeva == mechant.angelSlayer(0).name) {
 
             cibleAstralDeva = mechant.angelSlayer(0).name
-            gentil.astralDeva(0).attaqueMelee(mechant, mechant.angelSlayer(0).name, 0)
+            //gentil.astralDeva(0).attaqueMelee(mechant, mechant.angelSlayer(0).name, 0)
 
 
           }
@@ -461,7 +480,7 @@ class Combat {
 
         if (tour == 0) {
           for (wyrm <- mechant.greenGreatWyrmDragon) {
-            wyrm.attaqueMelee(gentil, gentil.solar(0).name, 0)
+            //wyrm.attaqueMelee(gentil, gentil.solar(0).name, 0)
             envol = true
             distanceWyrm = 55
           }
@@ -471,23 +490,23 @@ class Combat {
           if (!gentil.solar.isEmpty && cibleAngelSlayer == gentil.solar(0).name) {
 
             cibleAngelSlayer = gentil.solar(0).name
-            ang.attaqueMelee(gentil, gentil.solar(0).name, 0)
+            //ang.attaqueMelee(gentil, gentil.solar(0).name, 0)
 
 
           } else if (!gentil.planetar.isEmpty && cibleAngelSlayer == gentil.planetar(0).name) {
 
             cibleAngelSlayer = gentil.planetar(0).name
-            ang.attaqueMelee(gentil, gentil.planetar(0).name, 0)
+            //ang.attaqueMelee(gentil, gentil.planetar(0).name, 0)
 
           } else if (!gentil.movanicDeva.isEmpty && cibleAngelSlayer == gentil.movanicDeva(0).name) {
 
             cibleAngelSlayer = gentil.movanicDeva(0).name
-            ang.attaqueMelee(gentil, gentil.movanicDeva(0).name, 0)
+            //ang.attaqueMelee(gentil, gentil.movanicDeva(0).name, 0)
 
           } else if (!gentil.astralDeva.isEmpty && cibleAngelSlayer == gentil.astralDeva(0).name) {
 
             cibleAngelSlayer = gentil.astralDeva(0).name
-            ang.attaqueMelee(gentil, gentil.astralDeva(0).name, 0)
+            //ang.attaqueMelee(gentil, gentil.astralDeva(0).name, 0)
 
           }
         }
@@ -496,23 +515,23 @@ class Combat {
           if (!gentil.solar.isEmpty && cibleBarbareOrc == gentil.solar(0).name) {
 
             cibleBarbareOrc = gentil.solar(0).name
-            orc.attaqueMelee(gentil, gentil.solar(0).name, 0)
+            //orc.attaqueMelee(gentil, gentil.solar(0).name, 0)
 
 
           } else if (!gentil.planetar.isEmpty && cibleBarbareOrc == gentil.planetar(0).name) {
 
             cibleBarbareOrc = gentil.planetar(0).name
-            orc.attaqueMelee(gentil, gentil.planetar(0).name, 0)
+            //orc.attaqueMelee(gentil, gentil.planetar(0).name, 0)
 
           } else if (!gentil.movanicDeva.isEmpty && cibleBarbareOrc == gentil.movanicDeva(0).name) {
 
             cibleBarbareOrc = gentil.movanicDeva(0).name
-            orc.attaqueMelee(gentil, gentil.movanicDeva(0).name, 0)
+            //orc.attaqueMelee(gentil, gentil.movanicDeva(0).name, 0)
 
           } else if (!gentil.astralDeva.isEmpty && cibleBarbareOrc == gentil.astralDeva(0).name) {
 
             cibleBarbareOrc = gentil.astralDeva(0).name
-            orc.attaqueMelee(gentil, gentil.astralDeva(0).name, 0)
+            //orc.attaqueMelee(gentil, gentil.astralDeva(0).name, 0)
 
           }
         }
@@ -523,16 +542,16 @@ class Combat {
           var jetDes = scala.util.Random
           var choix = jetDes.nextInt(3)
           if (choix == 0 && !gentil.solar.isEmpty || gentil.planetar.isEmpty && gentil.movanicDeva.isEmpty && gentil.astralDeva.isEmpty) {
-            wyrm.attaqueMagic(gentil, gentil.solar(0).name, 0)
+            //wyrm.attaqueMagic(gentil, gentil.solar(0).name, 0)
           }
           else if (choix == 1 && !gentil.planetar.isEmpty || gentil.solar.isEmpty && gentil.movanicDeva.isEmpty && gentil.astralDeva.isEmpty) {
-            wyrm.attaqueMagic(gentil, gentil.planetar(0).name, 0)
+            //wyrm.attaqueMagic(gentil, gentil.planetar(0).name, 0)
           }
           else if (choix == 2 && !gentil.movanicDeva.isEmpty || gentil.planetar.isEmpty && gentil.solar.isEmpty && gentil.astralDeva.isEmpty) {
-            wyrm.attaqueMagic(gentil, gentil.movanicDeva(0).name, 0)
+            //wyrm.attaqueMagic(gentil, gentil.movanicDeva(0).name, 0)
           }
           else if (!gentil.astralDeva.isEmpty || gentil.planetar.isEmpty && gentil.movanicDeva.isEmpty && gentil.solar.isEmpty) {
-            wyrm.attaqueMagic(gentil, gentil.astralDeva(0).name, 0)
+            //wyrm.attaqueMagic(gentil, gentil.astralDeva(0).name, 0)
           }
         }
       }
@@ -662,4 +681,5 @@ class Combat {
       tour += 1
     }
   }
+
 }
