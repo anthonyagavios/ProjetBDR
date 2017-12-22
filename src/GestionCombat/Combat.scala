@@ -5,7 +5,7 @@ import Graph.{GraphCombat, Terrain}
 import org.apache.spark.{SparkConf, SparkContext}
 
 
-class Combat extends Serializable {
+class Combat  {
   def premierCombat(): Unit = {
     val conf = new SparkConf()
       .setAppName("Petersen Graph (10 nodes) test")
@@ -18,8 +18,7 @@ class Combat extends Serializable {
     var mechant = new PartyWyrm(0, 4, 0, 9, 1, graphComba)
     println("creation graph")
     var graphCreat  = graphComba.getGraph(sc)
-    graphComba.updateEdge(graphCreat)
-    println(graphCreat.edges.isEmpty())
+
 
     var distanceOrc = 120
     var lastDistanceOrc = 120
@@ -41,19 +40,36 @@ class Combat extends Serializable {
     var terrain = new Terrain
     terrain.constructionTerrain(gentil, mechant, distanceWorgs, distanceOrc, distanceWarlord, 0, 0, 1)
 
+    //chose target
+
+    graphCreat =  graphComba.near(graphCreat)
+    for(n<-graphCreat.vertices.collect()){
+      println(n._2.combatant.name+" "+ n._2.target)
+    }
+
     while (!fin) {
 
       println("tour :" + tour)
-
+      /*for(tu<- graphCreat.vertices.collect()){
+        println("hp "+ tu._2.combatant.name+" "+tu._2.combatant.HP+" id : "+tu._1)
+      }*/
       //after this, each vertice contains its messages
 
       var vertice_and_messages = graphComba.agrrMessage(graphCreat)
       //Condition de terminaison https://spark.apache.org/docs/2.1.1/api/scala/index.html#org.apache.spark.api.java.JavaRDD
-
+      if(vertice_and_messages.isEmpty()){
+        fin = true
+        println("fiiin "+ fin)
+      }
       graphCreat = graphComba.joinV(graphCreat, vertice_and_messages, gentil, mechant)
 
-      println("hp "+ graphCreat.vertices.collect().apply(1)._2.combatant.name+" "+graphCreat.vertices.collect().apply(1)._2.combatant.HP)
+      for(n<-graphCreat.vertices.collect()){
+        println(n._2.combatant.name+" "+ n._2.target)
+      }
+      graphCreat =  graphComba.near(graphCreat)
 
+
+      //graphCreat = graphComba.combatantDead(graphCreat.vertices.collect(), graphCreat.edges.collect(), sc)//, sc)
     // Attaque a distance tant que les orc ne sont pas au corp a corp pour le solar
       // Les orc ne font que des attaques corp a corp donc il avance tant qu'ils ne peuvent pas attaquer
       // Attaque toujours la meme cible tant que celle ci est vivante
@@ -159,11 +175,15 @@ class Combat extends Serializable {
       // Fin de tour
 
       // Test de victoire
-      if (mechant.warlord.isEmpty && mechant.worgsRider.isEmpty && mechant.barbareOrc.isEmpty) {
+      if (graphComba.teamWin(graphCreat) == 1) {
         println("Victoire du Solar")
         fin = true
-      } else if (gentil.solar.isEmpty) {
+      } else if (graphComba.teamWin(graphCreat) == 2) {
         println("Defaite du Solar")
+        fin = true
+      }
+      else if (graphComba.teamWin(graphCreat) == 3){
+        println("Egalité")
         fin = true
       }
 

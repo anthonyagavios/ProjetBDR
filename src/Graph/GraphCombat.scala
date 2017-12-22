@@ -4,7 +4,7 @@ import java.util
 
 import GestionCombat.{PartySolar, PartyWyrm}
 import org.apache.spark.graphx.{Edge, EdgeContext, EdgeTriplet, Graph, _}
-import Combattants._
+import Combattants.{Solar, Warlord, _}
 import org.apache.spark.rdd.RDD
 
 import scala.math._
@@ -18,31 +18,26 @@ class GraphCombat extends  Serializable {
   //var listCreat : List[(Long, node)] = Nil
   //var listEdge : List[Edge[(Long, Long, Int)]] = Nil
   var listCreat = new ArrayBuffer[(Long, node)]
-  var listEdge = new ArrayBuffer[Edge[Int]]
+  var listEdge = new ArrayBuffer[Edge[(Int, node, node)]]
 
-
+  var distanceOrc = 120
+  var lastDistanceOrc = 120
+  var distanceWorgs = 110
+  var distanceWarlord = 130
 
   var id : Long = 0
 
-  def changeNode(vid : VertexId, sommet : node, listCreatAtt : String, ennemiS: PartySolar, ennemi: PartyWyrm) : node = {
-    val values = listCreatAtt.split(" ")
-    var nsommet = sommet
-    for (v <- values) {
 
-      //sommet.combatant.attaqueDistance(ennemi, v, 1)
-      nsommet = sommet.combatant.attaqueMelee(ennemi, v, 0, sommet)
-    }
-    return nsommet
-  }
 
-  def updateEdge(g :Graph[node, Int]): Unit ={
+  def updateEdgeDist(g :Graph[node, (Int,node,node)]): Unit ={
     var myEdges = g.edges.collect()
     var myVertices = g.vertices.collect()
+    var src,dst,d : Int = 0
     for (edge <- myEdges) {
-      var src = edge.srcId.intValue()
-      var dst = edge.dstId.intValue()
-      var d = dist(myVertices.apply(src)._2.combatant, myVertices.apply(dst)._2.combatant)
-      edge.attr = d
+      src = edge.srcId.intValue()
+      dst = edge.dstId.intValue()
+      d = dist(myVertices.apply(src)._2.combatant, myVertices.apply(dst)._2.combatant)
+      //edge.attr._1 = d
     }
   }
 
@@ -77,16 +72,16 @@ class GraphCombat extends  Serializable {
   //creat adge for X teams
   def creatEdge(): Unit ={
     var l = listCreat
-    for((a1 : Long ,b1) <- listCreat){
-      for((a2 : Long,b2)<-l){
+    for((a1, b1) <- listCreat){
+      for((a2, b2)<-l){
         if(b1.team < b2.team){
-          listEdge.append(new Edge(a1,a2,dist(b1.combatant, b2.combatant)))
+          listEdge.append(new Edge(a1,a2,(dist(b1.combatant, b2.combatant),b1, b2)))
         }
       }
     }
   }
 
-  def getGraph(sc : SparkContext) : Graph[node, Int]={
+  def getGraph(sc : SparkContext) : Graph[node, (Int,node,node)]={
     creatEdge()
     var vertices  = sc.makeRDD(listCreat)
     var edges = sc.makeRDD(listEdge)
@@ -94,20 +89,113 @@ class GraphCombat extends  Serializable {
     return graphCreature
   }
 
-  def joinV(graphCreat : Graph[node, Int], vertice_and_messages : RDD[(VertexId, String)], gentil : PartySolar, mechant : PartyWyrm): Graph[node, Int] ={
+  def joinV(graphCreat : Graph[node, (Int,node,node)], vertice_and_messages : RDD[(VertexId, String)], gentil : PartySolar, mechant : PartyWyrm): Graph[node, (Int,node,node)] ={
     return graphCreat.joinVertices(vertice_and_messages)((vid, sommet, listCreatAtt) => changeNode(vid, sommet, listCreatAtt,  gentil, mechant))
   }
 
-  def agrrMessage(graph : Graph[node, Int]): RDD[(VertexId, String)] ={
-    var v = graph.aggregateMessages[String](sendAttCreature,  ((s1,s2)=>s1+" "+s2) )
+  def agrrMessage(graph : Graph[node, (Int,node,node)]): RDD[(VertexId, Combattant)] ={
+    var l  : List[Combattant] = new List() = null
+    var v = graph.aggregateMessages[Combattant](sendAttCreature,  ((s1,s2)=>(s1::s2)) )
     v.collect()
     return v
   }
 
-  def sendAttCreature(ctx: EdgeContext[node, Int, String]) : Unit = {
+  def sendAttCreature(ctx: EdgeContext[node, (Int,node,node), Combattant]) : Unit = {
     //Do we send to a given vertex. SRC or DST.
-    ctx.sendToDst( ctx.srcAttr.combatant.name)
-    ctx.sendToSrc( ctx.dstAttr.combatant.name)
+    //println("je passe n fois " + ctx.srcAttr)
+
+    if(ctx.dstAttr.live == true && ctx.srcAttr.live == true) {
+      if(ctx.srcAttr.target.id == ctx.dstAttr.id){
+        ctx.sendToDst(ctx.srcAttr.combatant)
+      }
+      if(ctx.dstAttr.target == ctx.srcAttr.combatant.name){
+        ctx.sendToSrc(ctx.dstAttr.combatant)
+      }
+    }
+  }
+
+  def changeNode(vid : VertexId, sommet : node, listCreatAtt : String, ennemiS: PartySolar, ennemi: PartyWyrm) : node = {
+    val values = listCreatAtt.split(" ")
+    var nsommet = sommet
+    for (v <- values) {
+      val carac = v.split("-")
+      if((v(0)=="worgsRider" || v(0)=="barbareOrc" || v(0)=="warlord"  )&& v(1).toInt<=7){
+        if(sommet.combatant.name == "solar")
+          nsommet = (new Solar).attaqueMelee(ennemi, v, 0, sommet)
+      }
+      nsommet = sommet.combatant.attaqueDistance(ennemi, v, 0, sommet)
+
+
+    }
+    return nsommet
+  }
+
+  def teamWin(g : Graph[node, (Int,node,node)]): Int ={
+    var vertice = g.vertices.collect()
+    var team1 = false
+    var team2 = false
+    for(v<-vertice){
+      if(v._2.team == 1 && v._2.live){
+        team1 = true
+      }
+      if(v._2.team == 2 && v._2.live){
+        team2 = true
+      }
+    }
+
+    if(team1 && team2) return -1
+    else if (!team1 && !team2) return  3
+    else if(team1) return 1
+    return 2
+  }
+
+  def near(g : Graph[node, (Int,node,node)]): Graph[node, (Int,node,node)] ={
+    var edge = g.edges.collect()
+    var vertice = g.vertices
+    var dist = 99999999//edge.collect().apply(0).attr._1
+    for(n<-vertice){
+      for(e<-edge){
+        if((n._2.id == e.dstId || n._2.id == e.srcId)&& e.attr._3.live && e.attr._2.live){
+          if(e.attr._1 <= dist){
+            dist = e.attr._1
+            if(n._2.id == e.attr._2.id){
+
+              n._2.target = e.attr._3
+            }
+            else { n._2.target = e.attr._2}
+          }
+        }
+      }
+
+    }
+
+    return g
+  }
+
+  def newTarget(g : Graph[node, (Int,node,node)]): Graph[node, (Int,node,node)] ={
+    var edge = g.edges.collect()
+    var vertice = g.vertices
+    var dist = 99999999//edge.apply(0).attr._1
+    for(n<-vertice){
+      println("nam "+ n._2.target.combatant.name+" "+n._2.target.live)
+      if(!n._2.target.live){
+        for(e<-edge){
+          if((n._2.id == e.dstId || n._2.id == e.srcId)&& e.attr._3.live && e.attr._2.live){
+            if(e.attr._1 <= dist){
+              dist = e.attr._1
+              if(n._2.id == e.attr._2.id){
+
+                n._2.target = e.attr._3
+              }
+              else { n._2.target = e.attr._2}
+            }
+          }
+        }
+        println("one dead")
+      }
+    }
+
+    return g
   }
 
 }

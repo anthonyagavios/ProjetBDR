@@ -26,6 +26,7 @@ class GreenGreatWyrmDragon() extends Combattant{
     newNode.id = sommet.id
     newNode.team = sommet.team
     newNode.combatant = sommet.combatant
+    newNode.target = sommet.target
     var hp = sommet.combatant.HP
 
     if (nomEnnemi == "solar") {
