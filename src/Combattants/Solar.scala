@@ -201,7 +201,8 @@ class Solar() extends Combattant {
   }
 
   override def priseDeDegats(dammage: Int): Unit = {
-    HP = HP - dammage;
+    // Le 15 correspond a la reduction de degats passive qu'a le solar
+    HP = HP - (dammage-15);
   }
 
 

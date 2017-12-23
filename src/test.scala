@@ -2,7 +2,7 @@
 import org.apache.spark.{SparkConf, SparkContext}
 import Bestiaire.creature
 
-
+// Programme sur lequel on a essayé de mettre les clusters
 
 object test extends App {
 

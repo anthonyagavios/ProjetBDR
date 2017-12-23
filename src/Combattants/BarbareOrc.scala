@@ -25,7 +25,7 @@ class BarbareOrc() extends Combattant {
 
     if (nomEnnemi == "solar") {
       for (att <- 0 to 0) {
-        if (jetDeDes() + (11 - 5 * att) > ennemi.solar(numero).AC) {
+        if (jetDeDes() + (11 - 5 * att) > ennemi.solar(numero).AC || jetDeDes()==20) {
           var degats = scala.util.Random.nextInt(22)
           ennemi.solar(numero).priseDeDegats(degats)
           if (ennemi.solar(numero).HP <= 0) {
@@ -38,7 +38,7 @@ class BarbareOrc() extends Combattant {
     }
     else if (nomEnnemi == "astralDeva") {
       for (att <- 0 to 0) {
-        if (jetDeDes() + (11 - 5 * att) > ennemi.astralDeva(numero).AC) {
+        if (jetDeDes() + (11 - 5 * att) > ennemi.astralDeva(numero).AC|| jetDeDes()==20) {
           var degats = scala.util.Random.nextInt(22)
           ennemi.astralDeva(numero).priseDeDegats(degats)
           if (ennemi.astralDeva(numero).HP <= 0) {
@@ -51,7 +51,7 @@ class BarbareOrc() extends Combattant {
     }
     else if (nomEnnemi == "planetar") {
       for (att <- 0 to 0) {
-        if (jetDeDes() + (11 - 5 * att) > ennemi.planetar(numero).AC) {
+        if (jetDeDes() + (11 - 5 * att) > ennemi.planetar(numero).AC|| jetDeDes()==20) {
           var degats = scala.util.Random.nextInt(22)
           ennemi.planetar(numero).priseDeDegats(degats)
           if (ennemi.planetar(numero).HP <= 0) {
@@ -64,7 +64,7 @@ class BarbareOrc() extends Combattant {
     }
     else if (nomEnnemi == "movanicDeva") {
       for (att <- 0 to 0) {
-        if (jetDeDes() + (11 - 5 * att) > ennemi.movanicDeva(numero).AC) {
+        if (jetDeDes() + (11 - 5 * att) > ennemi.movanicDeva(numero).AC|| jetDeDes()==20) {
           var degats = scala.util.Random.nextInt(22)
           ennemi.movanicDeva(numero).priseDeDegats(degats)
           if (ennemi.movanicDeva(numero).HP <= 0) {
@@ -82,7 +82,7 @@ class BarbareOrc() extends Combattant {
 
     if (nomEnnemi == "solar") {
       for (att <- 0 to 0) {
-        if (jetDeDes() + (5 - 5 * att) > ennemi.solar(numero).AC) {
+        if (jetDeDes() + (5 - 5 * att) > ennemi.solar(numero).AC|| jetDeDes()==20) {
           var degats = scala.util.Random.nextInt(13)
           ennemi.solar(numero).priseDeDegats(degats)
           if (ennemi.solar(numero).HP <= 0) {
@@ -95,7 +95,7 @@ class BarbareOrc() extends Combattant {
     }
     else if (nomEnnemi == "astralDeva") {
       for (att <- 0 to 0) {
-        if (jetDeDes() + (5 - 5 * att) > ennemi.astralDeva(numero).AC) {
+        if (jetDeDes() + (5 - 5 * att) > ennemi.astralDeva(numero).AC|| jetDeDes()==20) {
           var degats = scala.util.Random.nextInt(13)
           ennemi.astralDeva(numero).priseDeDegats(degats)
           if (ennemi.astralDeva(numero).HP <= 0) {
@@ -108,7 +108,7 @@ class BarbareOrc() extends Combattant {
     }
     else if (nomEnnemi == "planetar") {
       for (att <- 0 to 0) {
-        if (jetDeDes() + (5 - 5 * att) > ennemi.planetar(numero).AC) {
+        if (jetDeDes() + (5 - 5 * att) > ennemi.planetar(numero).AC|| jetDeDes()==20) {
           var degats = scala.util.Random.nextInt(13)
           ennemi.planetar(numero).priseDeDegats(degats)
           if (ennemi.planetar(numero).HP <= 0) {
@@ -121,7 +121,7 @@ class BarbareOrc() extends Combattant {
     }
     else if (nomEnnemi == "movanicDeva") {
       for (att <- 0 to 0) {
-        if (jetDeDes() + (5 - 5 * att) > ennemi.movanicDeva(numero).AC) {
+        if (jetDeDes() + (5 - 5 * att) > ennemi.movanicDeva(numero).AC|| jetDeDes()==20) {
           var degats = scala.util.Random.nextInt(13)
           ennemi.movanicDeva(numero).priseDeDegats(degats)
           if (ennemi.movanicDeva(numero).HP <= 0) {

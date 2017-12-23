@@ -255,14 +255,21 @@ class Terrain {
     }
 
     // Ajout des coordonnées pour les worgs
-    x = 70
+    x = 73
+    y = 0
+    var t = 0
     for (mons <- worgs) {
-      mons.setAttribute("xy", Array[Double](x, distanceWorgs))
+      if (t == 5) {
+        y = 1
+        x = 73
+      }
+      mons.setAttribute("xy", Array[Double](x, distanceWorgs - y))
+      t += 1
       x += 1
     }
 
-    var rndx=0
-    var rndy=0
+    var rndx = 0
+    var rndy = 0
     // Ajout des coordonnées pour les barbares
 
 
@@ -270,15 +277,14 @@ class Terrain {
 
       if (numeroCombat == 1) {
         x = 75
-          rndx = rand.nextInt(2)
-          rndy = rand.nextInt(2)
+        rndx = rand.nextInt(2)
+        rndy = rand.nextInt(2)
 
       }
-      else
-      {
+      else {
         x = 75
-         rndx = rand.nextInt(10) - 5
-         rndy = rand.nextInt(10) - 5
+        rndx = rand.nextInt(10) - 5
+        rndy = rand.nextInt(10) - 5
 
         while ((rndx * rndx + rndy * rndy) > 25) {
           rndx = rand.nextInt(10) - 5
@@ -287,8 +293,7 @@ class Terrain {
       }
 
 
-      mons.setAttribute("xy", Array[Double](x+rndx, distanceOrc + rndy-2))
-
+      mons.setAttribute("xy", Array[Double](x + rndx, distanceOrc + rndy - 2))
 
 
     }
@@ -379,24 +384,24 @@ class Terrain {
       x += 1
     }
 
-    x = 70
-    y = 10
+    x = 74
+    y = 1
     // Ajout des coordonnées pour les planetars
     for (mons <- planetars) {
       mons.setAttribute("xy", Array[Double](x, y))
       x += 1
     }
 
-    x = 70
-    y = 15
+    x = 72
+    y = 2
     // Ajout des coordonnées pour les movanicDeva
     for (mons <- movanicDevas) {
       mons.setAttribute("xy", Array[Double](x, y))
       x += 1
     }
 
-    x = 70
-    y = 20
+    x = 72
+    y = 1
     // Ajout des coordonnées pour les astralDeva
     for (mons <- astralDevas) {
       mons.setAttribute("xy", Array[Double](x, y))
@@ -406,18 +411,19 @@ class Terrain {
     // Ajout des coordonnées pour les worgs
     x = 70
     for (mons <- worgs) {
-      mons.setAttribute("xy", Array[Double](x, distanceWorgs))
+      var coord = mons.getAttribute[Array[Double]]("xy")
+      mons.setAttribute("xy", Array[Double](coord(0), coord(1) - distanceWorgs))
       x += 1
     }
 
     // Ajout des coordonnées pour les barbares
 
-      for (mons <- orcs) {
+    for (mons <- orcs) {
 
-        var coord =mons.getAttribute[Array[Double]]("xy")
-        mons.setAttribute("xy", Array[Double](coord(0) , coord(1)-distanceOrc ))
+      var coord = mons.getAttribute[Array[Double]]("xy")
+      mons.setAttribute("xy", Array[Double](coord(0), coord(1) - distanceOrc))
 
-      }
+    }
 
 
 

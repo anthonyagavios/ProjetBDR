@@ -96,10 +96,11 @@ object Main {
     // Exo1
     //exo1()
 
-    // Combat
+    // Combats
     var combat =new Combat
-    combat.premierCombat()
-         //combat.deuxiemeCombat()
+
+    //combat.premierCombat(1)
+    combat.deuxiemeCombat()
 
 
   }

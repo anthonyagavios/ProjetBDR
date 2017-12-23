@@ -181,7 +181,9 @@ class Combat {
       terrain.updateDistance(lastDistanceWorgs-distanceWorgs, lastDistanceOrc-distanceOrc, distanceWarlord, 0, 0, 1)
       lastDistanceOrc=distanceOrc
       lastDistanceWorgs=distanceWorgs
+
       Thread.sleep(1000)
+
       println("Il reste " + mechant.barbareOrc.size + " barbareOrc")
       println("Il reste " + mechant.worgsRider.size + " worgsRider")
       println("Il reste " + mechant.warlord.size + " warlord")
@@ -648,7 +650,7 @@ class Combat {
       terrain.updateDistance(0, lastDistanceOrc-distanceOrc, 0, distanceWyrm, distanceAngel ,2)
       lastDistanceOrc = distanceOrc
 
-      Thread.sleep(100)
+      Thread.sleep(1000)
 
       // Suivi console
       println("Il reste " + mechant.barbareOrc.size + " barbareOrc")
