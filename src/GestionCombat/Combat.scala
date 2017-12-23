@@ -16,6 +16,7 @@ class Combat {
     var distanceOrc = 120
     var lastDistanceOrc = 120
     var distanceWorgs = 110
+    var lastDistanceWorgs=110
     var distanceWarlord = 130
 
     var sizeOrc = mechant.barbareOrc.size
@@ -177,8 +178,9 @@ class Combat {
       gentil.solar(0).regeneration()
 
 
-      terrain.updateDistance(distanceWorgs, lastDistanceOrc-distanceOrc, distanceWarlord, 0, 0, 1)
+      terrain.updateDistance(lastDistanceWorgs-distanceWorgs, lastDistanceOrc-distanceOrc, distanceWarlord, 0, 0, 1)
       lastDistanceOrc=distanceOrc
+      lastDistanceWorgs=distanceWorgs
       Thread.sleep(1000)
       println("Il reste " + mechant.barbareOrc.size + " barbareOrc")
       println("Il reste " + mechant.worgsRider.size + " worgsRider")

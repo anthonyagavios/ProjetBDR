@@ -18,7 +18,7 @@ import scala.collection.mutable.ArrayBuffer
 
 object Main {
   def main(args: Array[String]): Unit = {
-/*
+      def exo1(){
         var bestiaire = new ArrayBuffer[Bestiaire.creature]()
         val conf = new SparkConf().setAppName("blbl").setMaster("local[*]")
         val sc = new SparkContext(conf)
@@ -58,7 +58,7 @@ object Main {
             bestiaire.append(Creature)
           }
         }
-        println("Creation Bestiaire.creature done")
+        println("Creation Bestiaire done")
 
         // Creation du tableau de liens de tout les spells
         for (url <- page.links) {
@@ -90,7 +90,11 @@ object Main {
             println("    - " + listeMonstre(i))
           }
         }
-        println("-----------------")*/
+        println("-----------------")
+      }
+
+    // Exo1
+    //exo1()
 
     // Combat
     var combat =new Combat

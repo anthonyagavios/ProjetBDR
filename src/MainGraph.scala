@@ -216,7 +216,7 @@ node#Worgs7{
     val x = scala.util.Random
     val y = scala.util.Random
     val nodex : Node = graph.addNode(vertice.node.combatant.name + n.toString)
-    nodex.setAttribute("xy", Array[Double](x.nextInt(20), y.nextInt(20)))
+    nodex.setAttribute("xy", Array[Double](x.nextInt(20)+n, y.nextInt(20)+n))
     nodex.setAttribute("ui.label", vertice.node.combatant.name)
 
     nodes(n) = nodex
