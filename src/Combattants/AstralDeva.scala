@@ -10,8 +10,8 @@ class AstralDeva() extends Combattant{
   var vitesse=50
   var HP = 172;
   var AC = 29;
-  override var posX = 0
-  override var posY = 0
+  override var posX = 20
+  override var posY = 20
 
   override def jetDeDes(): Int = {
     // Jet de des en random avec une limite à 20
@@ -35,10 +35,6 @@ class AstralDeva() extends Combattant{
           ennemi.angelSlayer(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.angelSlayer(numero).HP <= 0) {
-            ennemi.angelSlayer.remove(numero)
-            return newNode
-          }
         }
 
       }
@@ -50,10 +46,6 @@ class AstralDeva() extends Combattant{
           ennemi.barbareOrc(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.barbareOrc(numero).HP <= 0) {
-            ennemi.barbareOrc.remove(numero)
-            return newNode
-          }
         }
 
       }
@@ -65,10 +57,6 @@ class AstralDeva() extends Combattant{
           ennemi.warlord(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.warlord(numero).HP <= 0) {
-            ennemi.warlord.remove(numero)
-            return newNode
-          }
         }
 
       }
@@ -80,10 +68,6 @@ class AstralDeva() extends Combattant{
           ennemi.worgsRider(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.worgsRider(numero).HP <= 0) {
-            ennemi.worgsRider.remove(numero)
-            return newNode
-          }
         }
 
       }
@@ -95,12 +79,11 @@ class AstralDeva() extends Combattant{
           ennemi.greenGreatWyrmDragon(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.greenGreatWyrmDragon(numero).HP <= 0) {
-            ennemi.greenGreatWyrmDragon.remove(numero)
-            return newNode
-          }
         }
       }
+    }
+    if(hp <= 0){
+      newNode.live = false
     }
     return newNode
   }

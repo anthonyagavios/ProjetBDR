@@ -10,8 +10,8 @@ class Warlord() extends Combattant{
   var vitesse=30
   var HP = 141;
   var AC = 27;
-  override var posX = 0
-  override var posY = 0
+  override var posX = 20
+  override var posY = 20
 
   override def jetDeDes(): Int = {
     // Jet de des en random avec une limite à 20
@@ -20,7 +20,8 @@ class Warlord() extends Combattant{
     return jetDes;
   }
 
-  def attaqueMelee(ennemi: PartySolar, nomEnnemi: String, numero: Int, sommet : node): node = {
+  override def attaqueMelee(ennemi: PartySolar, nomEnnemi: String, numero: Int, sommet : node): node = {
+    println("je passe iciciiiiiiiiiiiiiiiiiii11111111111")
     var newNode = new node()
     newNode.id = sommet.id
     newNode.team = sommet.team
@@ -29,16 +30,13 @@ class Warlord() extends Combattant{
     var hp = sommet.combatant.HP
 
     if (nomEnnemi == "solar") {
+      println("je passe iciciiiiiiiiiiiiiiiiiii222222222222222")
       for (att <- 0 to 2) {
         if (jetDeDes() + (20 - 5 * att) > ennemi.solar(numero).AC) {
           var degats = scala.util.Random.nextInt(18)
           ennemi.solar(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.solar(numero).HP <= 0) {
-            ennemi.solar.remove(numero)
-            return newNode
-          }
         }
 
       }
@@ -50,10 +48,6 @@ class Warlord() extends Combattant{
           ennemi.astralDeva(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.astralDeva(numero).HP <= 0) {
-            ennemi.astralDeva.remove(numero)
-            return newNode
-          }
         }
 
       }
@@ -65,10 +59,6 @@ class Warlord() extends Combattant{
           ennemi.planetar(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.planetar(numero).HP <= 0) {
-            ennemi.planetar.remove(numero)
-            return newNode
-          }
         }
 
       }
@@ -80,18 +70,19 @@ class Warlord() extends Combattant{
           ennemi.movanicDeva(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.movanicDeva(numero).HP <= 0) {
-            ennemi.movanicDeva.remove(numero)
-            return newNode
-          }
         }
 
       }
     }
+    if(hp <= 0){
+      newNode.live = false
+    }
+    println("name : "+newNode.combatant.name+" "+newNode.combatant.HP)
+
     return newNode
   }
 
-  def attaqueDistance(ennemi: PartySolar, nomEnnemi: String, numero: Int, sommet : node): node = {
+  override def attaqueDistance(ennemi: PartySolar, nomEnnemi: String, numero: Int, sommet : node): node = {
     var newNode = new node()
     newNode.id = sommet.id
     newNode.team = sommet.team
@@ -104,10 +95,6 @@ class Warlord() extends Combattant{
           ennemi.solar(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.solar(numero).HP <= 0) {
-            ennemi.solar.remove(numero)
-            return newNode
-          }
         }
 
       }
@@ -119,10 +106,6 @@ class Warlord() extends Combattant{
           ennemi.astralDeva(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.astralDeva(numero).HP <= 0) {
-            ennemi.astralDeva.remove(numero)
-            return newNode
-          }
         }
 
       }
@@ -134,10 +117,6 @@ class Warlord() extends Combattant{
           ennemi.planetar(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.planetar(numero).HP <= 0) {
-            ennemi.planetar.remove(numero)
-            return newNode
-          }
         }
 
       }
@@ -149,13 +128,12 @@ class Warlord() extends Combattant{
           ennemi.movanicDeva(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.movanicDeva(numero).HP <= 0) {
-            ennemi.movanicDeva.remove(numero)
-            return newNode
-          }
         }
 
       }
+    }
+    if(hp <= 0){
+      newNode.live = false
     }
     return newNode
   }

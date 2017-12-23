@@ -12,8 +12,8 @@ class WorgsRider() extends Combattant {
   var vitesse = 20
   var HP = 13;
   var AC = 18;
-  override var posX = 0
-  override var posY = 0
+  override var posX = 20
+  override var posY = 20
 
   override def jetDeDes(): Int = {
     // Jet de des en random avec une limite à 20
@@ -22,7 +22,7 @@ class WorgsRider() extends Combattant {
     return jetDes;
   }
 
-  def attaqueMelee(ennemi: PartySolar, nomEnnemi: String, numero: Int, sommet : node): node = {
+  override def attaqueMelee(ennemi: PartySolar, nomEnnemi: String, numero: Int, sommet : node): node = {
     var newNode = new node()
     newNode.id = sommet.id
     newNode.team = sommet.team
@@ -37,10 +37,6 @@ class WorgsRider() extends Combattant {
           ennemi.solar(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.solar(numero).HP <= 0) {
-            ennemi.solar.remove(numero)
-            return newNode
-          }
         }
 
       }
@@ -52,10 +48,6 @@ class WorgsRider() extends Combattant {
           ennemi.astralDeva(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.astralDeva(numero).HP <= 0) {
-            ennemi.astralDeva.remove(numero)
-            return newNode
-          }
         }
 
       }
@@ -67,10 +59,6 @@ class WorgsRider() extends Combattant {
           ennemi.planetar(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.planetar(numero).HP <= 0) {
-            ennemi.planetar.remove(numero)
-            return newNode
-          }
         }
 
       }
@@ -82,18 +70,17 @@ class WorgsRider() extends Combattant {
           ennemi.movanicDeva(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.movanicDeva(numero).HP <= 0) {
-            ennemi.movanicDeva.remove(numero)
-            return newNode
-          }
         }
 
       }
     }
+    if(hp <= 0){
+      newNode.live = false
+    }
     return newNode
   }
 
-  def attaqueDistance(ennemi: PartySolar, nomEnnemi: String, numero: Int, sommet : node): node = {
+  override def attaqueDistance(ennemi: PartySolar, nomEnnemi: String, numero: Int, sommet : node): node = {
     var newNode = new node()
     newNode.id = sommet.id
     newNode.team = sommet.team
@@ -106,10 +93,6 @@ class WorgsRider() extends Combattant {
           ennemi.solar(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.solar(numero).HP <= 0) {
-            ennemi.solar.remove(numero)
-            return newNode
-          }
         }
 
       }
@@ -121,10 +104,6 @@ class WorgsRider() extends Combattant {
           ennemi.astralDeva(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.astralDeva(numero).HP <= 0) {
-            ennemi.astralDeva.remove(numero)
-            return newNode
-          }
         }
 
       }
@@ -136,10 +115,6 @@ class WorgsRider() extends Combattant {
           ennemi.planetar(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.planetar(numero).HP <= 0) {
-            ennemi.planetar.remove(numero)
-            return newNode
-          }
         }
 
       }
@@ -151,13 +126,12 @@ class WorgsRider() extends Combattant {
           ennemi.movanicDeva(numero).priseDeDegats(degats)
           hp = hp - degats
           newNode.combatant.HP = hp
-          if (ennemi.movanicDeva(numero).HP <= 0) {
-            ennemi.movanicDeva.remove(numero)
-            return newNode
-          }
         }
 
       }
+    }
+    if(hp <= 0){
+      newNode.live = false
     }
     return newNode
   }

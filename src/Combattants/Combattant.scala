@@ -1,6 +1,6 @@
 package Combattants
 
-import GestionCombat.PartyWyrm
+import GestionCombat.{PartySolar, PartyWyrm}
 import Graph.node
 import org.apache.spark.graphx.Graph
 
@@ -23,6 +23,7 @@ abstract class Combattant extends Serializable{
   }
 
   def attaqueMelee( ennemi: PartyWyrm, nomEnnemi: String, numero: Int, sommet : node): node = {
+    println("je passe iciciiiiiiiiiiiiiiiiiii4444444444444444444444")
     if (nomEnnemi == "angelSlayer") {
       for (att <- 0 to 3) {
         if (jetDeDes() + (35 - 5 * att) > ennemi.angelSlayer(numero).AC) {
@@ -162,6 +163,15 @@ abstract class Combattant extends Serializable{
 
     return sommet
 
+  }
+
+  def attaqueMelee(ennemi: PartySolar, nomEnnemi: String, numero: Int, sommet : node): node = {
+    println("je passe iciciiiiiiiiiiiiiiiiiii333333333333333333333333")
+    return  sommet
+  }
+
+  def attaqueDistance(ennemi: PartySolar, nomEnnemi: String, numero: Int, sommet : node): node = {
+    return sommet
   }
 
   def attaqueMagic(){}

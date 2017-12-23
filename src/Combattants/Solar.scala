@@ -155,6 +155,7 @@ class Solar() extends Combattant {
       }
     }
     else if (nomEnnemi == "warlord") {
+
       for (att <- 0 to 3) {
         if (jetDeDes() + (31 - 5 * att) > ennemi.warlord(numero).AC) {
           var degats = scala.util.Random.nextInt(26)

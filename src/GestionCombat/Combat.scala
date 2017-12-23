@@ -43,31 +43,40 @@ class Combat  {
     //chose target
 
     graphCreat =  graphComba.near(graphCreat)
-    for(n<-graphCreat.vertices.collect()){
-      println(n._2.combatant.name+" "+ n._2.target)
-    }
 
     while (!fin) {
 
       println("tour :" + tour)
-      /*for(tu<- graphCreat.vertices.collect()){
-        println("hp "+ tu._2.combatant.name+" "+tu._2.combatant.HP+" id : "+tu._1)
-      }*/
       //after this, each vertice contains its messages
-
       var vertice_and_messages = graphComba.agrrMessage(graphCreat)
-      //Condition de terminaison https://spark.apache.org/docs/2.1.1/api/scala/index.html#org.apache.spark.api.java.JavaRDD
+
       if(vertice_and_messages.isEmpty()){
         fin = true
         println("fiiin "+ fin)
       }
-      graphCreat = graphComba.joinV(graphCreat, vertice_and_messages, gentil, mechant)
+      //else{
+        graphCreat = graphComba.joinV(graphCreat, vertice_and_messages, gentil, mechant)
+        graphCreat = graphComba.updateEdgeNode(graphCreat)
 
-      for(n<-graphCreat.vertices.collect()){
-        println(n._2.combatant.name+" "+ n._2.target)
-      }
       graphCreat =  graphComba.near(graphCreat)
+      //}
+      /*for(e<-graphCreat.edges.collect()){
+        //println(e.attr._2.combatant.name+" : "+ e.attr._2.live+" vie target : "+e.attr._2.target.live+" ---- "+e.attr._3.combatant.name+" :"+e.attr._3.live)
 
+        println(e.attr._2.combatant.name+" : "+ e.attr._2.live+" ---- "+e.attr._3.combatant.name+" :"+e.attr._3.live)
+      }*/
+
+      /*for(v<-graphCreat.vertices.collect()){
+        println(v._2.combatant.name+" "+v._2.target.combatant.name+" "+v._2.target.live)
+      }*/
+
+
+
+/*
+      for(v<-graphCreat.vertices.collect()){
+        println(v._2.combatant.name+"-- id : "+v._1+" --target "+v._2.target)
+      }
+*/
 
       //graphCreat = graphComba.combatantDead(graphCreat.vertices.collect(), graphCreat.edges.collect(), sc)//, sc)
     // Attaque a distance tant que les orc ne sont pas au corp a corp pour le solar
@@ -75,7 +84,7 @@ class Combat  {
       // Attaque toujours la meme cible tant que celle ci est vivante
       // Attaque l'ennemie le plus proche
 
-      var cibleSolar = ""
+     /* var cibleSolar = ""
 
       if (distanceOrc < distanceWarlord && distanceOrc < distanceWorgs && !mechant.barbareOrc.isEmpty || (mechant.warlord.isEmpty && mechant.worgsRider.isEmpty)) {
         cibleSolar = mechant.barbareOrc(0).name
@@ -139,14 +148,14 @@ class Combat  {
           //orc.attaqueMelee(gentil, gentil.solar(0).name, 0)
         }
 
-      }
+      }*/
 
       // Fuite
-      if (mechant.warlord.isEmpty && mechant.worgsRider.isEmpty && mechant.barbareOrc.size == 1) {
+      /*if (mechant.warlord.isEmpty && mechant.worgsRider.isEmpty && mechant.barbareOrc.size == 1) {
         println("Le dernier Orc a fui la bataille")
         println("Victoire pour le Solar")
         fin = true
-      }
+      }*/
 
       // Deplacement
       if (!mechant.barbareOrc.isEmpty) {
@@ -217,11 +226,18 @@ class Combat  {
 
       terrain.updateDistance(distanceWorgs, lastDistanceOrc-distanceOrc, distanceWarlord, 0, 0, 1)
       lastDistanceOrc=distanceOrc
-      Thread.sleep(1000)
-      println("Il reste " + mechant.barbareOrc.size + " barbareOrc")
-      println("Il reste " + mechant.worgsRider.size + " worgsRider")
-      println("Il reste " + mechant.warlord.size + " warlord")
-      println("Il rest  " + gentil.solar(0).HP + " solar")
+
+      for(vertice<-graphCreat.vertices.collect()){
+        println(vertice._2.combatant.name+" "+vertice._2.combatant.HP+" "+vertice._2.live)
+      }
+      println("\n")
+      Thread.sleep(500)
+
+
+      //println("Il reste " + mechant.barbareOrc.size + " barbareOrc")
+      //println("Il reste " + mechant.worgsRider.size + " worgsRider")
+      //println("Il reste " + mechant.warlord.size + " warlord")
+      //println("Il rest  " + gentil.solar(0).HP + " solar")
       tour += 1
     }
   }

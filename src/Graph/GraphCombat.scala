@@ -81,6 +81,8 @@ class GraphCombat extends  Serializable {
     }
   }
 
+
+
   def getGraph(sc : SparkContext) : Graph[node, (Int,node,node)]={
     creatEdge()
     var vertices  = sc.makeRDD(listCreat)
@@ -101,13 +103,13 @@ class GraphCombat extends  Serializable {
 
   def sendAttCreature(ctx: EdgeContext[node, (Int,node,node), String]) : Unit = {
     //Do we send to a given vertex. SRC or DST.
-    //println("je passe n fois " + ctx.srcAttr)
 
     if(ctx.dstAttr.live == true && ctx.srcAttr.live == true) {
+
       if(ctx.srcAttr.target.id == ctx.dstAttr.id){
         ctx.sendToDst(ctx.srcAttr.combatant.name+"-"+ctx.attr._1)
       }
-      if(ctx.dstAttr.target == ctx.srcAttr.combatant.name){
+      if(ctx.dstAttr.target.id == ctx.srcAttr.id){
         ctx.sendToSrc( ctx.dstAttr.combatant.name+"-"+ctx.attr._1)
       }
     }
@@ -116,14 +118,28 @@ class GraphCombat extends  Serializable {
   def changeNode(vid : VertexId, sommet : node, listCreatAtt : String, ennemiS: PartySolar, ennemi: PartyWyrm) : node = {
     val values = listCreatAtt.split(" ")
     var nsommet = sommet
+
     for (v <- values) {
       val carac = v.split("-")
-      if((v(0)=="worgsRider" || v(0)=="barbareOrc" || v(0)=="warlord"  )&& v(1).toInt<=7){
-        if(v(0)=="solar")
-          nsommet = sommet.combatant.attaqueMelee(ennemi, v, 0, sommet)
-      }
-      nsommet = sommet.combatant.attaqueDistance(ennemi, v, 0, sommet)
 
+      if((carac(0)=="worgsRider" || carac(0)=="barbareOrc" || carac(0)=="warlord" )&& carac(1).toInt<=7){
+          //nsommet = sommet.combatant.attaqueMelee(ennemi, carac(0), 0, sommet)
+
+      }
+
+      if(carac(0)=="solar"&& carac(1).toInt<=7){
+        println("name attaquant : "+carac(0)+" ---- name attaqué "+nsommet.combatant.name)
+        nsommet = nsommet.combatant.attaqueMelee(ennemiS, carac(0), 0, nsommet)
+        println(nsommet.combatant.name+" "+nsommet.combatant.HP)
+
+      }
+      if((carac(0)=="worgsRider" || carac(0)=="barbareOrc" || carac(0)=="warlord" )&& carac(1).toInt>7){
+        //nsommet = sommet.combatant.attaqueDistance(ennemi, carac(0), 0, sommet)
+
+      }
+      if(carac(0)=="solar"&& carac(1).toInt>7){
+        nsommet = nsommet.combatant.attaqueDistance(ennemiS, carac(0), 0, nsommet)
+      }
 
     }
     return nsommet
@@ -151,22 +167,64 @@ class GraphCombat extends  Serializable {
   def near(g : Graph[node, (Int,node,node)]): Graph[node, (Int,node,node)] ={
     var edge = g.edges.collect()
     var vertice = g.vertices
-    var dist = 99999999//edge.collect().apply(0).attr._1
+    //edge.collect().apply(0).attr._1
     for(n<-vertice){
+      var dist = 999999999
       for(e<-edge){
+        //println(e.attr._3.live+"  "+e.attr._2.live)
         if((n._2.id == e.dstId || n._2.id == e.srcId)&& e.attr._3.live && e.attr._2.live){
           if(e.attr._1 <= dist){
             dist = e.attr._1
-            if(n._2.id == e.attr._2.id){
-
+            if(n._2.id == e.srcId){
+              println(n._2.combatant.name)
+              println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
               n._2.target = e.attr._3
+              n._2.target.combatant = e.attr._3.combatant
+              n._2.target.live = e.attr._3.live
+              n._2.target.id = e.attr._3.id
+
             }
-            else { n._2.target = e.attr._2}
+            else {
+              n._2.target = e.attr._2
+              n._2.target.combatant = e.attr._2.combatant
+              n._2.target.live = e.attr._2.live
+              n._2.target.id = e.attr._2.id
+            }
           }
         }
       }
 
     }
+    for(vertice<-g.vertices.collect()){
+      //println(vertice._2.combatant.name+" "+vertice._2.target.combatant.name+" "+vertice._2.target.live)
+    }
+    g.vertices.collect()
+    return g
+  }
+
+  def updateEdgeNode(g : Graph[node, (Int,node,node)]): Graph[node, (Int,node,node)] ={
+    var edge = g.edges
+    var vertice = g.vertices.collect()
+
+    for(v<-vertice){
+      for(e<-edge){
+        if(e.srcId == v._1 ){
+          e.attr._2.combatant = v._2.combatant
+          e.attr._2.live = v._2.live
+          e.srcId = v._1
+        }
+        if(e.dstId == v._1){
+          e.attr._3.combatant = v._2.combatant
+          e.attr._3.live = v._2.live
+          e.dstId = v._1
+        }
+      }
+    }
+    /*for(e<-g.edges.collect()){
+      println(e.attr._2.combatant.name+" : "+ e.attr._2.live+" vie target : "+e.attr._2.target.live+" ---- "+e.attr._3.combatant.name+" :"+e.attr._3.live)
+
+      //println(e.attr._2.combatant.name+" : "+ e.attr._2.live+" ---- "+e.attr._3.combatant.name+" :"+e.attr._3.live)
+    }*/
 
     return g
   }
