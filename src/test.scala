@@ -4,6 +4,7 @@ import org.apache.spark.rdd.{ PairRDDFunctions, RDD }
 
 
 object test extends App{
+  // Programme sur lequel on a tenter de mettre les clusters
   val conf = new SparkConf().setAppName("blbl").setMaster("local[*]")
   val sc = new SparkContext(conf)
   class creature(val name : String) extends Serializable {

@@ -69,7 +69,7 @@ class GraphCombat extends  Serializable {
   }
 
 
-  //creat adge for X teams
+  //creat edge for X teams
   def creatEdge(): Unit ={
     var l = listCreat
     for((a1, b1) <- listCreat){
@@ -177,7 +177,7 @@ class GraphCombat extends  Serializable {
             dist = e.attr._1
             if(n._2.id == e.srcId){
               println(n._2.combatant.name)
-              println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+              println("-----------------------------")
               n._2.target = e.attr._3
               n._2.target.combatant = e.attr._3.combatant
               n._2.target.live = e.attr._3.live
